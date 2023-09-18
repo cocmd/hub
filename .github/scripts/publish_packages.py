@@ -140,7 +140,7 @@ released_packages = [] # get_released_packages()
 
 print("")
 print("Calculating delta...")
-missing_packages = calculate_missing_packages(released_packages, repository_packages)
+missing_packages = repository_packages #calculate_missing_packages(released_packages, repository_packages)
 
 if len(missing_packages) == 0:
   print("Packages are already up-to-date")
