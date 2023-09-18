@@ -134,7 +134,7 @@ def update_index(repository: List[Package]):
   if should_publish:
     subprocess.run(["gh", "release", "upload", RELEASES_VERSION, target_file, "--clobber"])
 
-
+subprocess.run(["gh", "release", "create", RELEASES_VERSION])
 print("Reading packages from repository...")
 repository_packages = get_repository_packages()
 print(f'found {len(repository_packages)} packages in this PR')
