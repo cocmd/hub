@@ -19,7 +19,7 @@ UploadedPackage = namedtuple('UploadedPackage', 'name version')
 
 should_publish = os.getenv("PUBLISH", "false") == "true"
 
-RELEASES_VERSION = "v1.0.0"
+RELEASES_VERSION = "0.0.0"
 
 # Get the packages that have been published on the Github Releases section
 def get_released_packages() -> List[UploadedPackage]:
