@@ -4,7 +4,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       - name: "Install python dependencies"
         run: "pip install pyyaml"
       - name: "Quality check"
-        run: "python .github/scripts/validate/main.py"
+        run: "python .github/scripts/validate/master.py"
       - name: "Publish report"
         if: always()
         run: cat validation_report.md >> $GITHUB_STEP_SUMMARY
@@ -34,8 +34,8 @@ jobs:
         if: always()
         run: |
           BRANCH=$(git branch --show-current)
-          if [ "$BRANCH" = "main" ]; then
-            echo "Skipping on main branch"
+          if [ "$BRANCH" = "master" ]; then
+            echo "Skipping on master branch"
             exit 0
           fi
 
