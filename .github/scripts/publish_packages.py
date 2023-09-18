@@ -42,18 +42,13 @@ def get_released_packages() -> List[UploadedPackage]:
 # Get the packages defined in the hub repository
 def get_repository_packages() -> List[Package]:
   packages = []
-  for path in glob.glob("packages/*/*/_manifest.yml"):
+  for path in glob.glob("packages/*/*/cocmd.yml"):
     package_dir = os.path.dirname(path)
     with open(path, 'r') as stream:
       try:
         manifest = yaml.safe_load(stream)
         name = manifest["name"]
-        version = manifest["version"]
-        title = manifest["title"]
-        description = manifest["description"]
-        author = manifest["author"]
-        tags = manifest.get("tags", [])
-        package = Package(name, version, package_dir, title, description, author, tags)
+        package = Package(name, '0.0.0', package_dir, None, None, None, None)
         packages.append(package)
       except yaml.YAMLError as exc:
         print("Exception parsing YAML ", exc)
@@ -85,7 +80,7 @@ def calculate_sha256(filename) -> str:
 # Archive the given package, calculating its hash
 def create_archive(package: Package)-> Tuple[str, str, str]: 
   temp_dir = tempfile.gettempdir()
-  target_name = os.path.join(temp_dir, f"{package.name}-{package.version}")
+  target_name = os.path.join(temp_dir, f"{package.name}-{package.version}"})
   shutil.make_archive(target_name, 'zip', package.location)
   
   target_file = f"{target_name}.zip"
