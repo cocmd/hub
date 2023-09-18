@@ -97,7 +97,10 @@ def create_archive(package: Package)-> Tuple[str, str, str]:
 # Upload the package files (archive + SHA256 sum) on GH Releases
 def upload_to_releases(archive_path, archive_hash_path):
   if should_publish:
+    print("Uploading to Github Releases...",  RELEASES_VERSION)
     subprocess.run(["gh", "release", "upload", RELEASES_VERSION, archive_hash_path, archive_path, "--clobber" ])
+  else:
+    print("didn't really upload")
 
 # Generate the updated index and upload it to GH Releases
 def update_index(repository: List[Package]):
@@ -155,7 +158,7 @@ for package in missing_packages:
 
   print(f"Created archive {archive_path}, hash: {archive_hash}")
 
-  print(f"Uploading to Github Releases...")
+  
   upload_to_releases(archive_path, archive_hash_path)
   print("Done!")
 
