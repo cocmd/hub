@@ -137,6 +137,7 @@ def update_index(repository: List[Package]):
 
 print("Reading packages from repository...")
 repository_packages = get_repository_packages()
+print(f'found {len(repository_packages)} packages in this PR')
 
 # print("Obtaining released packages from GitHub Releases...")
 released_packages = [] # get_released_packages()
