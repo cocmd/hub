@@ -1,0 +1,38 @@
+name: publish-packages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-packages:
+    concurrency: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: "Install python dependencies"
+        run: "pip install pyyaml"
+      - name: "Publish packages"
+        run: "python .github/scripts/publish_packages.py"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISH: "true"
+      - name: "Setup SSH deploy key"
+        uses: webfactory/ssh-agent@fc49353b67b2b7c1e0e6a600572d01a69f2672dd
+        with:
+          ssh-private-key: ${{ secrets.HUB_FRONTEND_DEPLOY_KEY }}
+      - name: "Push update on hub-frontend"
+        run: |
+          git config --global user.name "Cocmd Hub Bot"
+
+          git clone git@github.com:cocmd/hub-frontend.git
+          cd hub-frontend
+
+          git rev-parse --verify HEAD > current_hub_sha.txt
+          git add current_hub_sha.txt
+          git commit -m "chore(misc): auto deploy from HUB CI"
+          git push
