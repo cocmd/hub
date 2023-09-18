@@ -80,7 +80,7 @@ def calculate_sha256(filename) -> str:
 # Archive the given package, calculating its hash
 def create_archive(package: Package)-> Tuple[str, str, str]: 
   temp_dir = tempfile.gettempdir()
-  target_name = os.path.join(temp_dir, f"{package.name}-{package.version}"})
+  target_name = os.path.join(temp_dir, f"{package.name}-{package.version}")
   shutil.make_archive(target_name, 'zip', package.location)
   
   target_file = f"{target_name}.zip"
