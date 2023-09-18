@@ -42,7 +42,8 @@ def get_released_packages() -> List[UploadedPackage]:
 # Get the packages defined in the hub repository
 def get_repository_packages() -> List[Package]:
   packages = []
-  for path in glob.glob("packages/*/*/cocmd.yml"):
+  for path in glob.glob("packages/*/cocmd.yaml"):
+    print('looking into ', path)
     package_dir = os.path.dirname(path)
     with open(path, 'r') as stream:
       try:
