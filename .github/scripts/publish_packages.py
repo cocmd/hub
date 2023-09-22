@@ -49,7 +49,7 @@ def get_repository_packages() -> List[Package]:
       try:
         manifest = yaml.safe_load(stream)
         name = manifest["name"]
-        package = Package(name, '0.0.0', package_dir, None, None, None, None)
+        package = Package(name, '0.0.0', package_dir, name, name, "cocmd", [])
         packages.append(package)
       except yaml.YAMLError as exc:
         print("Exception parsing YAML ", exc)
