@@ -1,0 +1,90 @@
+name: osx
+automations:
+  - name: setup-dev-common
+    content:
+      description: "Setup common development tools on macOS"
+      steps:
+      - content: |
+          # Install Homebrew
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+          echo '# Set PATH, MANPATH, etc., for Homebrew.' >> ~.bash_profile
+          echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
+        description: 'Install Homebrew and configure environment'
+        runner: shell
+        title: install Homebrew
+      - content: |
+          echo '\U0001F4BB Installing: iTerm2'
+          brew install --cask iterm2
+        description: 'Install iTerm2'
+        runner: shell
+        title: install iTerm2
+      - content: |
+          echo '\U0001F4BB Installing: Zsh'
+          brew install zsh
+        description: 'Install Zsh'
+        runner: shell
+        title: install Zsh
+      - content: |
+          # Set Zsh as the default shell
+          chsh -s /usr/local/bin/zsh
+
+          # Install Oh My Zsh
+          sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+          # Configure basic Zsh settings (you can customize this further)
+          echo 'export PATH="$PATH:$HOME/bin:/usr/local/bin:/usr/local/sbin"' >> ~/.zshrc
+          echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
+          echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
+        description: 'Configure Zsh as the default shell and install Oh My Zsh'
+        runner: shell
+        title: configure Zsh
+      - content: |
+          echo '\U0001F4BB Installing: basic'
+          brew install curl
+          brew install wget
+          brew install unzip
+          brew install tree
+          brew install neofetch
+          brew install wxwidgets
+          brew install libxslt fop
+
+          echo '\U0001F4BB Installing: CLI tools'
+          brew install git
+
+          echo '\U0001F4BB Configuring: git'
+          git config --global user.name "$MY_NAME"
+          git config --global user.email "$MY_EMAIL"
+        description: 'Install basic development tools and configure Git'
+        runner: shell
+        title: install basics (curl, wget, unzip, git etc)
+      - content: |
+          if ! pip3 help > /dev/null; then
+            echo "installing python & pip ..."
+            #brew install python2
+            brew install python3
+          fi
+
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
+          bash ~/miniconda.sh -b -p $HOME/miniconda
+        description: 'Install Python and Miniconda'
+        runner: shell
+        title: install Python essentials
+      - content: |
+          echo '\U0001F4BB Installing: Node.js'
+          brew install node
+        description: 'Install Node.js'
+        runner: shell
+        title: install Node.js
+      - content: |
+          echo '\U0001F4BB Installing: Visual Studio Code'
+          brew install --cask visual-studio-code
+
+          # Install useful VSCode extensions
+          code --install-extension ms-python.python
+          code --install-extension rust-lang.rust
+          code --install-extension vscode-icons-team.vscode-icons
+          # Add more extensions here as needed
+        description: 'Install Visual Studio Code and extensions'
+        runner: shell
+        title: install Visual Studio Code and extensions
