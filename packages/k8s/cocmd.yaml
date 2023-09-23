@@ -1,4 +1,4 @@
-name: kubernetes
+name: k8s
 aliases: |
     alias k='kubectl'
     alias kgp='kubectl get pods'
@@ -14,6 +14,8 @@ aliases: |
     alias kctx='kubectx'
     alias kns='kubens'
 automations:
+  - name: setup
+    file: ./scripts/setup.yaml
   - name: backup-configmaps
     content:
       description: "Backup all ConfigMaps in a namespace"
