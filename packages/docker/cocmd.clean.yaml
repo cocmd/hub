@@ -23,6 +23,9 @@ steps:
     docker ps -a
     docker images -a
     docker volume ls
-  description: This will remove all Docker containers, images, volumes, and networks
+  description: |
+    This will remove all Docker containers, images, volumes, and networks
+    from your system. Use with caution!
+    
   runner: shell
   title: Cleanup Docker
