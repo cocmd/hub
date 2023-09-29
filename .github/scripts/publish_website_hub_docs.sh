@@ -15,6 +15,10 @@ do
     dir=${dir##*/}
 
     echo "# $dir" > $WEBSITE_PATH/docs/hub/packages/$dir.md
+
+    # echo to the md file a link to the github of this package in "https://github.com/cocmd/hub/tree/master/packages/$dir"
+    echo "### [ Package Source Code ]("https://github.com/cocmd/hub/tree/master/packages/$dir")" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
+
     echo ":::info How To Install?" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
     echo "run in terminal:" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
     echo "\`\`\`bash" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
@@ -29,6 +33,18 @@ do
 
     # remove original title
     sed -i '' "/## $dir/d" $WEBSITE_PATH/docs/hub/packages/$dir.md
+
+    # set var with home_dir ~ and dir '.cocmd/runtime/$dir'
+    
+    home_dir=$(echo ~)
+    runtime_dir="$home_dir/.cocmd/runtime/$dir"
+    # get the absolute path
+    abs_dir=$(cd "$runtime_dir" && pwd)
+
+    # replace in md file all abs_dir with '.'
+    sed -i '' "s|$abs_dir|.|g" $WEBSITE_PATH/docs/hub/packages/$dir.md
+    
+
     
 done
 
