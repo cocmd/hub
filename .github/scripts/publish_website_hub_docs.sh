@@ -5,8 +5,8 @@ set -e
 WEBSITE_PATH="../cocmd-website"
 
 cocmd install -y ./packages
-rm -rf $WEBSITE_PATH/docs/hub/packages/
-mkdir -p $WEBSITE_PATH/docs/hub/packages/
+# rm -rf $WEBSITE_PATH/docs/packages/from_hub/
+mkdir -p $WEBSITE_PATH/docs/packages/from_hub/
 
 # for each direcroty in packages, run cocmd docs <package>
 for dir in ./packages/*/
@@ -14,25 +14,25 @@ do
     dir=${dir%*/}
     dir=${dir##*/}
 
-    echo "# $dir" > $WEBSITE_PATH/docs/hub/packages/$dir.md
+    echo "# $dir" > $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
     # echo to the md file a link to the github of this package in "https://github.com/cocmd/hub/tree/master/packages/$dir"
-    echo "### [ Package Source Code ]("https://github.com/cocmd/hub/tree/master/packages/$dir")" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
+    echo "### [ Package Source Code ]("https://github.com/cocmd/hub/tree/master/packages/$dir")" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
-    echo ":::info How To Install?" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
-    echo "run in terminal:" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
-    echo "\`\`\`bash" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
-    echo "cocmd install -y $dir" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
-    echo "\`\`\`" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
-    echo ":::" >> $WEBSITE_PATH/docs/hub/packages/$dir.md
+    echo ":::info How To Install?" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo "run in terminal:" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo "\`\`\`bash" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo "cocmd install -y $dir" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo "\`\`\`" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo ":::" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
-    cocmd docs $dir --raw-markdown>> $WEBSITE_PATH/docs/hub/packages/$dir.md
+    cocmd docs $dir --raw-markdown>> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
     
     # remove line that contains "location:" from md file
-    sed -i '' '/location:/d' $WEBSITE_PATH/docs/hub/packages/$dir.md
+    sed -i '' '/location:/d' $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
     # remove original title
-    sed -i '' "/## $dir/d" $WEBSITE_PATH/docs/hub/packages/$dir.md
+    sed -i '' "/## $dir/d" $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
     # set var with home_dir ~ and dir '.cocmd/runtime/$dir'
     
@@ -42,7 +42,7 @@ do
     abs_dir=$(cd "$runtime_dir" && pwd)
 
     # replace in md file all abs_dir with '.'
-    sed -i '' "s|$abs_dir|.|g" $WEBSITE_PATH/docs/hub/packages/$dir.md
+    sed -i '' "s|$abs_dir|.|g" $WEBSITE_PATH/docs/packages/from_hub/$dir.md
     
 
     
