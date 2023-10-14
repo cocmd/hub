@@ -1,4 +1,4 @@
-name: devops
+name: jenkins
 paths:
     - ./bin/
     

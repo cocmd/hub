@@ -37,7 +37,7 @@ do
     # set var with home_dir ~ and dir '.cocmd/runtime/$dir'
     
     home_dir=$(echo ~)
-    runtime_dir="$home_dir/.cocmd/runtime/$dir"
+    runtime_dir="./packages/$dir"
     # get the absolute path
     abs_dir=$(cd "$runtime_dir" && pwd)
 
@@ -48,19 +48,19 @@ do
     
 done
 
+cd $WEBSITE_PATH
+sed "s/CURRENT_STABLE_VERSION = .*/CURRENT_STABLE_VERSION = 'v$VERSION';/" docusaurus.config.js > docusaurus.config.js.bak
+mv docusaurus.config.js.bak docusaurus.config.js
 
-# sed "s/CURRENT_STABLE_VERSION = .*/CURRENT_STABLE_VERSION = 'v$VERSION';/" docusaurus.config.js > docusaurus.config.js.bak
-# mv docusaurus.config.js.bak docusaurus.config.js
+yarn
+yarn build && yarn deploy
 
-# yarn
-# yarn build && yarn deploy
+echo "Committing version update"
+git add docusaurus.config.js
+git commit -m "Version bump: $VERSION"
 
-# echo "Committing version update"
-# git add docusaurus.config.js
-# git commit -m "Version bump: $VERSION"
-
-# echo "Pushing changes"
-# git push
+echo "Pushing changes"
+git push
 
 
 echo "Done!"

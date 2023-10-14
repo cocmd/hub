@@ -1,0 +1,75 @@
+name: prometheus
+automations:
+      - name: query-condition
+        content:
+            description: "Run a prometheus query and check if a condition is true"
+            params: 
+            - name: url
+              save: false
+            - name: query
+              save: false
+            - name: operator
+              save: false
+            - name: threshold
+              save: false
+            steps:
+              - title: "Run Query Condition"
+                runner: shell
+                description: "Run a prometheus query and check if a condition is true"
+                content: |
+                    PROMETHEUS_URL="{{url}}"
+                    QUERY="{{query}}"
+
+                    # Operator (e.g., >=, <=, =, !=)
+                    OPERATOR="{{operator}}"
+                    
+                    # Threshold value
+                    THRESHOLD="{{threshold}}"
+
+                    echo "sending $PROMETHEUS_URL/api/v1/query?query=$QUERY"
+                    # Run the query against Prometheus
+                    result=$(curl -G -s "$PROMETHEUS_URL/api/v1/query?" --data-urlencode "query=$QUERY")
+
+                    # echo "DEBUG: Result: $result"
+                    # Extract the value from the result using jq (you can install jq if not already installed)
+                    value=$(echo "$result" | jq -r '.data.result[0].value[1]')
+
+                    echo "DEBUG: Value: $value"
+
+                    # Check if the value is numeric
+                    if [[ ! "$value" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
+                        echo "Error: Value is not numeric." >&2
+                        exit 1
+                    fi
+
+                    # Check if the value meets the specified condition
+                    case "$OPERATOR" in
+                    ">=")
+                        condition="$(bc <<< "$value >= $THRESHOLD")"
+                        ;;
+                    "<=")
+                        condition="$(bc <<< "$value <= $THRESHOLD")"
+                        ;;
+                    "=")
+                        condition="$(bc <<< "$value == $THRESHOLD")"
+                        ;;
+                    "!=")
+                        condition="$(bc <<< "$value != $THRESHOLD")"
+                        ;;
+                    *)
+                        echo "Invalid operator: $OPERATOR. Use >=, <=, =, or !="
+                        exit 1
+                        ;;
+                    esac
+
+                    # echo "DEBUG: Condition: $condition"
+                    if [ "$condition" -eq 1 ]; then
+                        echo "Condition '$OPERATOR $THRESHOLD' met: Value is $value"
+                        exit 0
+                    else
+                        echo "Condition '$OPERATOR $THRESHOLD' not met: Value is $value"
+                        exit 1
+                    fi
+
+
+        

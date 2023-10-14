@@ -1,0 +1,156 @@
+title: Setup Kubernetes
+description: setup Kubernetes for desktop
+env: osx
+depends:
+  - brew.setup  
+steps:
+  - content: |
+      ## Kubernetes Setup
+      
+      This will install kubectl, kubectx, and minikube on your machine
+      It will also set up a local Kubernetes cluster using Minikube
+      and set up kubectl to use that cluster
+      
+      If you already have kubectl, kubectx, and minikube installed,
+      this will not overwrite them
+
+    description: ''
+    runner: markdown
+    title: Instructions
+
+  - content: |
+      #!/bin/bash
+      # check if kubectl is installed
+
+      if ! command -v kubectl &> /dev/null
+      then
+          echo "kubectl could not be found"
+          echo "installing kubectl"
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/darwin/arm64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
+          sudo chown root: /usr/local/bin/kubectl
+          kubectl version --client
+      else
+          echo "kubectl is already installed"
+      fi
+    description: install kubectl on your machine
+    approval_message: Do you whish to install Kubectl?
+    runner: shell
+    title: Install Kubectl
+  - content: |
+      #!/bin/bash
+      # check if kubectx is installed
+
+      if ! command -v kubectx &> /dev/null
+      then
+          echo "kubectx could not be found"
+          echo "installing kubectx"
+          brew install kubectx
+      else
+          echo "kubectx is already installed"
+      fi
+      
+    description: Install kubectx on your machine
+    approval_message: Do you whish to install Kubectx?
+    runner: shell
+    title: Install Kubectx
+  - content: |
+      #!/bin/bash
+      # check if minikube is installed
+
+      if ! command -v minikube &> /dev/null
+      then
+          echo "minikube could not be found"
+          echo "installing minikube"
+          brew install minikube
+      else
+          echo "minikube is already installed"
+      fi
+    description: Install minikube on your machine
+    runner: shell
+    approval_message: Do you whish to install Minikube?
+    title: Install Minikube
+
+  - title: Intall K9s - Kubernetes CLI To Manage Your Clusters In Style
+    content: |
+      #!/bin/bash
+      # check if k9s is installed
+
+      if ! command -v k9s &> /dev/null
+      then
+          echo "k9s could not be found"
+          echo "installing k9s"
+          brew install k9s
+      else
+          echo "k9s is already installed"
+      fi
+    description: Install k9s on your machine
+    runner: shell
+    approval_message: Do you whish to install K9s?
+  - title: Install Helm
+    content: |
+      #!/bin/bash
+      # check if helm is installed
+
+      if ! command -v helm &> /dev/null
+      then
+          echo "helm could not be found"
+          echo "installing helm"
+          brew install helm
+      else
+          echo "helm is already installed"
+      fi
+    description: Install helm on your machine
+    runner: shell
+    approval_message: Do you whish to install Helm?
+  - title: Install kube-capacity
+    content: |
+      #!/bin/bash
+      # check if kube-capacity is installed
+
+      if ! command -v kube-capacity &> /dev/null
+      then
+          echo "kube-capacity could not be found"
+          echo "installing kube-capacity"
+          brew tap robscott/tap
+          brew install kube-capacity
+      else
+          echo "kube-capacity is already installed"
+      fi
+    description: Install kube-capacity on your machine
+    runner: shell
+    approval_message: Do you whish to install kube-capacity?
+  - title: Install Kor - Kubernetes Orphaned Resources Finder
+    content: |
+      #!/bin/bash
+      # check if kor is installed
+
+      if ! command -v kor &> /dev/null
+      then
+          echo "kor could not be found"
+          echo "installing kor"
+          brew install kor
+      else
+          echo "kor is already installed"
+      fi
+    description: Install kor on your machine
+    runner: shell
+    approval_message: Do you whish to install kor?
+  - title: Install kubefwd
+    content: |
+      #!/bin/bash
+      # check if kubefwd is installed
+
+      if ! command -v kubefwd &> /dev/null
+      then
+          echo "kubefwd could not be found"
+          echo "installing kubefwd"
+          brew install txn2/tap/kubefwd
+      else
+          echo "kubefwd is already installed"
+      fi
+    description: Install kubefwd on your machine
+    runner: shell
+    approval_message: Do you whish to install kubefwd?
+

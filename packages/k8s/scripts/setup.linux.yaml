@@ -1,0 +1,100 @@
+title: Setup Kubernetes for Linux
+description: Setup Kubernetes for desktop on Linux
+env: linux
+depends:
+  - brew.setup  
+steps:
+  - content: |
+      ## Kubernetes Setup
+      
+      This will install kubectl, kubectx, and minikube on your machine
+      It will also set up a local Kubernetes cluster using Minikube
+      and set up kubectl to use that cluster
+      
+      If you already have kubectl, kubectx, and minikube installed,
+      this will not overwrite them
+
+    description: ''
+    runner: markdown
+    title: Instructions
+
+  - content: |
+      #!/bin/bash
+      # check if kubectl is installed
+
+      if ! command -v kubectl &> /dev/null
+      then
+          echo "kubectl could not be found"
+          echo "installing kubectl"
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
+          sudo chown root: /usr/local/bin/kubectl
+          kubectl version --client
+      else
+          echo "kubectl is already installed"
+      fi
+    description: Install kubectl on your machine
+    approval_message: Do you wish to install Kubectl?
+    runner: shell
+    title: Install Kubectl
+
+  - content: |
+      #!/bin/bash
+      # check if kubectx is installed
+
+      if ! command -v kubectx &> /dev/null
+      then
+          echo "kubectx could not be found"
+          echo "installing kubectx"
+          sudo apt install kubectx
+      else
+          echo "kubectx is already installed"
+      fi
+      
+    description: Install kubectx on your machine
+    approval_message: Do you wish to install Kubectx?
+    runner: shell
+    title: Install Kubectx
+
+  - content: |
+      #!/bin/bash
+      # check if minikube is installed
+
+      if ! command -v minikube &> /dev/null
+      then
+          echo "minikube could not be found"
+          echo "installing minikube"
+          
+          sudo apt install virtualbox virtualbox-ext-pack
+
+          wget https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          chmod +x minikube-linux-amd64
+          sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+      else
+          echo "minikube is already installed"
+      fi
+    description: Install minikube on your machine
+    runner: shell
+    approval_message: Do you wish to install Minikube?
+    title: Install Minikube
+
+  - title: Install Helm
+    content: |
+      #!/bin/bash
+      # check if helm is installed
+
+      if ! command -v helm &> /dev/null
+      then
+          echo "installing helm according to https://helm.sh/docs/intro/install/"
+          curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+          sudo apt-get install apt-transport-https --yes
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+          sudo apt-get update
+          sudo apt-get install helm
+      else
+          echo "helm is already installed"
+      fi
+    description: Install Helm on your machine
+    runner: shell
+    approval_message: Do you wish to install Helm?
