@@ -1,0 +1,29 @@
+name: go
+automations:
+  - name: setup
+    content:
+      description: "Setup Golang"
+      env: osx
+      steps:
+      - title: install Go
+        description: 'Install Golang on this machine'
+        runner: shell
+        content: |
+          # check if go is installed first, if yes print message and leave
+          if go version > /dev/null; then
+            echo "Golang is already installed, skipping..."
+            exit 0
+          fi
+          brew install go
+      - title: Golang VSCode plugins
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Golang development?
+        content: |
+          # check that code is installed, if not print message and exit 1
+          if ! code -v > /dev/null; then
+            echo "VSCode is not installed, skipping..."
+            exit 1
+          fi
+          code --install-extension golang.go
+

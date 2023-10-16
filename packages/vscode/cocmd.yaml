@@ -1,0 +1,165 @@
+name: vscode
+automations:
+  - name: setup
+    content:
+      description: "Install VSCode and coding plugins"
+      env: osx
+      steps:  
+      - title: install Visual Studio Code
+        description: 'Install Visual Studio Code and extensions'
+        runner: shell
+        content: |
+          # check if code is installed first, if yes print message and leave
+          if code -v > /dev/null; then
+            echo "Visual Studio Code is already installed, skipping..."
+            exit 0
+          fi
+
+          brew install --cask visual-studio-code
+
+          # setup the code binary in the path with vscode
+          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.zshrc
+          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.bashrc
+          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.bash_profile
+          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.profile
+
+          code --install-extension vscode-icons-team.vscode-icons
+      - title: Install extentions for Python
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Python development?
+        content: |
+          # check that code is installed, if not print message and exit 1
+          if ! code -v > /dev/null; then
+            echo "VSCode is not installed, skipping..."
+            exit 1
+          fi
+
+          # install vscode plugins for python
+          code --install-extension ms-python.python
+          code --install-extension ms-python.vscode-pylance
+          code --install-extension ms-toolsai.jupyter
+          code --install-extension njpwerner.autodocstring
+          code --install-extension ms-toolsai.jupyter-keymap
+          code --install-extension ms-toolsai.jupyter-renderers
+      
+      - title: Install extentions for Rust
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Rust development?
+        content: |
+          # check that code is installed, if not print message and exit 1
+          if ! code -v > /dev/null; then
+            echo "VSCode is not installed, skipping..."
+            exit 1
+          fi
+
+          # install vscode plugins for rust
+          code --install-extension rust-lang.rust
+          code --install-extension serayuzgur.crates
+          code --install-extension bungcip.better-toml
+          code --install-extension vadimcn.vscode-lldb
+
+      - title: Install extentions for Node.js
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Node.js development?
+        content: |
+
+          # install vscode plugins for node
+          code --install-extension dbaeumer.vscode-eslint
+          code --install-extension esbenp.prettier-vscode
+          code --install-extension formulahendry.auto-close-tag
+          code --install-extension formulahendry.auto-rename-tag
+          code --install-extension ms-vscode.vscode-typescript-tslint-plugin
+          code --install-extension msjsdiag.debugger-for-chrome
+          code --install-extension Orta.vscode-jest
+          code --install-extension PKief.material-icon-theme
+          code --install-extension vscode-icons-team.vscode-icons
+          code --install-extension wix.vscode-import-cost
+          code --install-extension xabikos.JavaScriptSnippets
+          code --install-extension zhuangtongfa.material-theme
+          code --install-extension Zignd.html-css-class-completion
+
+      - title: Install extentions for Kubernetes
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Kubernetes development?
+        content: |
+          # install vscode plugins for kubernetes
+          code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
+      
+      - title: Install extentions for Docker 
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Docker development?
+        content: |
+          # install vscode plugins for docker
+          code --install-extension ms-azuretools.vscode-docker
+      
+      - title: Install extentions for Terraform 
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Terraform development?
+        content: |
+          # install vscode plugins for terraform
+          code --install-extension hashicorp.terraform
+
+      - title: Install extentions for Go
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Go development?
+        content: |
+          # install vscode plugins for go
+          code --install-extension golang.go
+      
+      - title: Install extentions for Java
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Java development?
+        content: |
+          # install vscode plugins for java
+          code --install-extension vscjava.vscode-java-pack
+
+      - title: Install extentions for C#
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for C# development?
+        content: |
+          # install vscode plugins for c#
+          code --install-extension ms-dotnettools.csharp
+
+      - title: Install extentions for PHP
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for PHP development?
+        content: |
+          # install vscode plugins for php
+          code --install-extension felixfbecker.php-debug
+          code --install-extension felixfbecker.php-intellisense
+          code --install-extension felixfbecker.php-pack
+          code --install-extension bmewburn.vscode-intelephense-client
+
+      - title: Install extentions for Frontend dev
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Frontend development?
+        content: |
+          # install vscode plugins for frontend
+          code --install-extension christian-kohler.path-intellisense
+          code --install-extension CoenraadS.bracket-pair-colorizer-2
+          code --install-extension eamodio.gitlens
+          code --install-extension esbenp.prettier-vscode
+          code --install-extension formulahendry.auto-close-tag
+          code --install-extension formulahendry.auto-rename-tag
+          code --install-extension jpoissonnier.vscode-styled-components
+          code --install-extension ms-azuretools.vscode-docker
+          code --install-extension msjsdiag.debugger-for-chrome
+          code --install-extension Orta.vscode-jest
+          code --install-extension PKief.material-icon-theme
+          code --install-extension vscode-icons-team.vscode-icons
+          code --install-extension wix.vscode-import-cost
+          code --install-extension xabikos.JavaScriptSnippets
+          code --install-extension zhuangtongfa.material-theme
+          code --install-extension Zignd.html-css-class-completion
+        

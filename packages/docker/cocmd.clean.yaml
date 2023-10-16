@@ -1,28 +1,28 @@
 description: Cleanup Docker environment
 steps:
 - content: |
-    # Stop all running containers
-    docker stop $(docker ps -a -q)
+    # check if there are containers
+    if [ "$(docker ps -q)" ]; then
+      docker stop $(docker ps -a -q)
+      docker rm $(docker ps -a -q)
+    fi
 
-    # Remove all containers
-    docker rm $(docker ps -a -q)
-
-    # Remove all images
-    docker rmi $(docker images -a -q)
-
-    # Remove all volumes
-    docker volume rm $(docker volume ls -q)
-
+    # check if there are images
+    if [ "$(docker images -q)" ]; then
+      docker rmi $(docker images -a -q)
+    fi
+    
+    # check if there are volumes
+    if [ "$(docker volume ls -q)" ]; then
+      docker volume rm $(docker volume ls -q)
+    fi
+    
     # Remove all networks not used by at least one container
     docker network prune -f
 
     # System-wide cleanup (optional)
     docker system prune -af
 
-    # Check remaining resources
-    docker ps -a
-    docker images -a
-    docker volume ls
   description: |
     This will remove all Docker containers, images, volumes, and networks
     from your system. Use with caution!

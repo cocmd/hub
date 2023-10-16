@@ -1,8 +1,9 @@
 name: osx
 automations:
-  - name: setup-dev-common
+  - name: setup
     content:
-      description: "Setup common development tools on macOS"
+      description: "Setup common packages on macOS"
+      env: osx
       steps:
       - content: |
           # Install Homebrew
@@ -13,78 +14,166 @@ automations:
         description: 'Install Homebrew and configure environment'
         runner: shell
         title: install Homebrew
+      
       - content: |
-          echo '\U0001F4BB Installing: iTerm2'
-          brew install --cask iterm2
-        description: 'Install iTerm2'
-        runner: shell
-        title: install iTerm2
-      - content: |
-          echo '\U0001F4BB Installing: Zsh'
-          brew install zsh
-        description: 'Install Zsh'
-        runner: shell
-        title: install Zsh
-      - content: |
-          # Set Zsh as the default shell
-          chsh -s /usr/local/bin/zsh
-
-          # Install Oh My Zsh
-          sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-          # Configure basic Zsh settings (you can customize this further)
-          echo 'export PATH="$PATH:$HOME/bin:/usr/local/bin:/usr/local/sbin"' >> ~/.zshrc
-          echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
-          echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
-        description: 'Configure Zsh as the default shell and install Oh My Zsh'
-        runner: shell
-        title: configure Zsh
-      - content: |
-          echo '\U0001F4BB Installing: basic'
           brew install curl
           brew install wget
           brew install unzip
           brew install tree
-          brew install neofetch
-          brew install wxwidgets
-          brew install libxslt fop
-
-          echo '\U0001F4BB Installing: CLI tools'
-          brew install git
-
-          echo '\U0001F4BB Configuring: git'
-          git config --global user.name "$MY_NAME"
-          git config --global user.email "$MY_EMAIL"
+          brew install jq
         description: 'Install basic development tools and configure Git'
         runner: shell
-        title: install basics (curl, wget, unzip, git etc)
-      - content: |
-          if ! pip3 help > /dev/null; then
-            echo "installing python & pip ..."
-            #brew install python2
-            brew install python3
+        title: install basic packages
+
+      - title: install xcode
+        description: 'Install Xcode'
+        runner: shell
+        content: |
+          xcode-select --install
+
+      - title: install chrome browser
+        description: 'Install Chrome browser'
+        runner: shell
+        approval_message: Do you whish to install Chrome browser?
+        content: |
+          # check if chrome not installed already
+          if [ -d "/Applications/Google Chrome.app" ]; then
+            echo "Chrome is already installed, skipping..."
+            exit 0
           fi
 
-          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
-          bash ~/miniconda.sh -b -p $HOME/miniconda
-        description: 'Install Python and Miniconda'
-        runner: shell
-        title: install Python essentials
-      - content: |
-          echo '\U0001F4BB Installing: Node.js'
-          brew install node
-        description: 'Install Node.js'
-        runner: shell
-        title: install Node.js
-      - content: |
-          echo '\U0001F4BB Installing: Visual Studio Code'
-          brew install --cask visual-studio-code
+          brew install --cask google-chrome
 
-          # Install useful VSCode extensions
-          code --install-extension ms-python.python
-          code --install-extension rust-lang.rust
-          code --install-extension vscode-icons-team.vscode-icons
-          # Add more extensions here as needed
-        description: 'Install Visual Studio Code and extensions'
+      - title: install firefox browser
+        description: 'Install Firefox browser'
         runner: shell
-        title: install Visual Studio Code and extensions
+        approval_message: Do you whish to install Firefox browser?
+        content: |
+          # check if firefox not installed already
+          if [ -d "/Applications/Firefox.app" ]; then
+            echo "Firefox is already installed, skipping..."
+            exit 0
+          fi
+
+          brew install --cask firefox
+      
+      - title: install lastpass
+        description: 'Install LastPass'
+        runner: shell
+        approval_message: Do you whish to install LastPass?
+        content: |
+          # check if lastpass not installed already
+          if [ -d "/Applications/LastPass.app" ]; then
+            echo "LastPass is already installed, skipping..."
+            exit 0
+          fi
+
+          brew install --cask lastpass
+
+      - title: install whatsapp for desktop
+        description: 'Install WhatsApp for desktop'
+        runner: shell
+        approval_message: Do you whish to install WhatsApp for desktop?
+        content: |
+          # check if whatsapp not installed already
+          if [ -d "/Applications/WhatsApp.app" ]; then
+            echo "WhatsApp is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask whatsapp
+
+      - title: install slack
+        description: 'Install Slack'
+        runner: shell
+        approval_message: Do you whish to install Slack?
+        content: |
+          # check if slack not installed already
+          if [ -d "/Applications/Slack.app" ]; then
+            echo "Slack is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask slack
+
+      - title: install zoom
+        description: 'Install Zoom'
+        runner: shell
+        approval_message: Do you whish to install Zoom?
+        content: |
+          # check if zoom not installed already
+          if [ -d "/Applications/zoom.us.app" ]; then
+            echo "Zoom is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask zoom
+
+      - title: install youtube player for desktop
+        description: 'Install YouTube player for desktop'
+        runner: shell
+        approval_message: Do you whish to install YouTube player for desktop?
+        content: |
+          # check if youtube not installed already
+          if [ -d "/Applications/YouTube.app" ]; then
+            echo "YouTube is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask youtube
+
+      - title: install spotify
+        description: 'Install Spotify'
+        runner: shell
+        approval_message: Do you whish to install Spotify?
+        content: |
+          # check if spotify not installed already
+          if [ -d "/Applications/Spotify.app" ]; then
+            echo "Spotify is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask spotify
+
+      - title: install pdf reader 
+        description: 'Install PDF reader'
+        runner: shell
+        approval_message: Do you whish to install PDF reader?
+        content: |
+          # check if pdf reader not installed already
+          if [ -d "/Applications/Adobe Acrobat Reader DC.app" ]; then
+            echo "PDF reader is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask adobe-acrobat-reader
+
+      - title: install vlc player
+        description: 'Install VLC player'
+        runner: shell
+        approval_message: Do you whish to install VLC player?
+        content: |
+          # check if vlc player not installed already
+          if [ -d "/Applications/VLC.app" ]; then
+            echo "VLC player is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask vlc
+
+      - title: install openvpn connect
+        description: 'Install OpenVPN Connect'
+        runner: shell
+        approval_message: Do you whish to install OpenVPN Connect?
+        content: |
+          # check if openvpn connect not installed already
+          if [ -d "/Applications/OpenVPN Connect.app" ]; then
+            echo "OpenVPN Connect is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask openvpn-connect
+
+      - title: install authy
+        description: 'Install Authy'
+        runner: shell
+        approval_message: Do you whish to install Authy?
+        content: |
+          # check if authy not installed already
+          if [ -d "/Applications/Authy Desktop.app" ]; then
+            echo "Authy is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask authy

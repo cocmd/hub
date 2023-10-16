@@ -1,0 +1,60 @@
+name: impala
+automations:
+  - name: setup
+    content:
+      description: "Install required packages for Impala"
+      env: any
+      steps:  
+      - title: install impala py package
+        description: 'To execute Impala queries from code'
+        runner: shell
+        content: |
+          # check if impyla python package installed via pip
+          if pip list | grep impyla > /dev/null; then
+            echo "Impyla python package is already installed, skipping..."
+            exit 0
+          fi
+          pip install impyla
+
+  - name: query
+    content:
+      description: Run a query on Impala
+      env: any
+      steps:  
+
+      - title: make sure impala py package isntalled
+        description: 'To execute Impala queries from the command line'
+        runner: cocmd
+        content: impala.setup
+
+      - title: run query
+        description: 'Run a query on Impala'
+        runner: python
+        params:
+          - name: impala_host
+            save: true
+          - name: impala_host_port
+            save: true
+          - name: impala_username
+            save: true
+          - name: impala_password
+            save: true
+          - name: query
+            save: false
+        content: |
+          from impala.dbapi import connect
+          print({{impala_host_port}})
+          with connect(
+              host="{{impala_host}}",
+              port={{impala_host_port}},
+              user="{{impala_username}}",
+              password="{{impala_password}}",
+              auth_mechanism="PLAIN",
+              use_ssl=True,
+          ) as conn:
+              with conn.cursor() as cursor:
+                  cursor.execute("{{query}}")
+                  results = cursor.fetchall()
+          
+          for row in results:
+            print(', '.join(map(str, row)))

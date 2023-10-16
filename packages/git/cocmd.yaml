@@ -13,4 +13,28 @@ aliases: |
     alias gs='git status'
     alias gtag='git tag'
     alias gtags='git tag -n'
+automations:
+  - name: setup
+    content:
+      description: "Install and configure git on this machine"
+      env: osx
+      steps:
+      - content: |
+          brew install git
+        description: 'Install basic Git'
+        runner: shell
+        title: install git
+
+      - content: |
+          git config --global user.name "{{username}}"
+          git config --global user.email "{{email}}"
+        description: 'Configure git'
+        runner: shell
+        title: Configue git
+        params: 
+            - name: username
+              save: true
+            - name: email
+              save: true
+      
     

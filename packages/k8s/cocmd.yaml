@@ -187,8 +187,7 @@ automations:
             namespace={{namespace}}
             regex={{regex}}
 
-            # Run the kubectl command and store the result in a variable
-            result=$(kubectl get pods -n {{namespace}} --field-selector=status.phase==Running --sort-by=.metadata.creationTimestamp -o custom-columns="NAME:.metadata.name,RESTARTS:.status.containerStatuses[0].restartCount")
+            result=$(kubectl get pods -n $namespace --field-selector=status.phase==Running --sort-by=.metadata.creationTimestamp -o custom-columns="NAME:.metadata.name,RESTARTS:.status.containerStatuses[0].restartCount")
 
             # Check for errors
             if [ $? -ne 0 ]; then
@@ -210,10 +209,10 @@ automations:
             # Exit with failure if any pod has a restart count greater than 0 and print a message
             if [ ${#pods_with_restart_gt_zero[@]} -gt 0 ]; then
               echo "Exiting with error: Some pods have a restart count greater than 0."
-              echo "Pods with restart count > 0: ${pods_with_restart_gt_zero[@]}"
+              echo "❌ Pods with restart count > 0: ${pods_with_restart_gt_zero[@]}"
               exit 1
             else
-              echo "Everything is okay. No pods with restart counts greater than 0 found."
+              echo "✅ No pods with restart counts greater than 0 found."
               exit 0
             fi
 

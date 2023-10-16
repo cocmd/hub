@@ -1,0 +1,66 @@
+name: zsh
+automations:
+  - name: setup
+    content:
+      description: "Setup zsh,oh-my-zsh for this machine"
+      env: osx
+      steps:
+      - content: |
+          # check if iterm already installed, if yes print message and leave
+          if [ -d "/Applications/iTerm.app" ]; then
+            echo "iTerm2 is already installed, skipping..."
+            exit 0
+          fi
+          brew install --cask iterm2
+        description: 'Install iTerm2'
+        runner: shell
+        title: install iTerm2
+      - content: |
+          brew install zsh
+        description: 'Install Zsh'
+        runner: shell
+        title: install Zsh
+      - content: |
+          # Set Zsh as the default shell
+          chsh -s $(which zsh)
+
+          # Configure basic Zsh settings (you can customize this further)
+          echo 'export PATH="$PATH:$HOME/bin:/usr/local/bin:/usr/local/sbin"' >> ~/.zshrc
+          echo 'export LC_ALL=en_US.UTF-8' >> ~/.zshrc
+          echo 'export LANG=en_US.UTF-8' >> ~/.zshrc
+        description: 'Configure Zsh as the default shell and install Oh My Zsh'
+        runner: shell
+        title: configure Zsh
+      - title: Install top zsh plugins 
+        description: (Optional) If you have Zsh installed, this will install some useful plugins for devs
+        runner: shell
+        approval_message: Do you whish to install Zsh plugins for development?
+        content: |
+          # check that zsh is installed, if not print message and exit 1
+          if ! zsh --version > /dev/null; then
+            echo "Zsh is not installed, skipping..."
+            exit 1
+          fi
+
+          # install zsh plugins
+          sh -c "$(curl -fsSL https://raw.githubusercontent.com/zdharma/zinit/master/doc/install.sh)"
+          echo 'zinit light zdharma/fast-syntax-highlighting' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-autosuggestions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-completions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-syntax-highlighting' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-autosuggestions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-completions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-syntax-highlighting' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-autosuggestions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-completions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-syntax-highlighting' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-autosuggestions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-completions' >> ~/.zshrc
+          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          

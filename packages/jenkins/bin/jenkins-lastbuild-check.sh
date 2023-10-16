@@ -1,5 +1,5 @@
-#!/bin/bash
-set -e
+# COCMD-DESC: Check the status of the latest build of a Jenkins job.
+# COCMD-USAGE: jenkins-lastbuild-check.sh jenkins_url job_name username password
 
 # Function to display usage information
 usage() {
@@ -54,15 +54,15 @@ LATEST_BUILD_STATUS=$(get_latest_build_status)
 
 # Check if the build status contains "SUCCESS" or "FAILURE"
 if [[ "$LATEST_BUILD_STATUS" == *"SUCCESS"* ]]; then
-    echo "Latest build of $JOB_NAME: SUCCESS"
+    echo "✅ Latest build of $JOB_NAME: SUCCESS"
     echo "$JENKINS_URL/job/$JOB_NAME/lastBuild/console"
     exit 0
 elif [[ "$LATEST_BUILD_STATUS" == *"FAILURE"* ]]; then
-    echo "Latest build of $JOB_NAME: FAILURE"
+    echo "❌ Latest build of $JOB_NAME: FAILURE"
     echo "$JENKINS_URL/job/$JOB_NAME/lastBuild/console"
     exit 1
 else
-    echo "Latest build of $JOB_NAME: Status unknown or in progress"
+    echo "❌ Latest build of $JOB_NAME: Status unknown or in progress"
     echo "$JENKINS_URL/job/$JOB_NAME/lastBuild/console"
     exit 2
 fi

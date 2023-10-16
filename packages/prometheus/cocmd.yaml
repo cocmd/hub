@@ -30,6 +30,12 @@ automations:
                     # Run the query against Prometheus
                     result=$(curl -G -s "$PROMETHEUS_URL/api/v1/query?" --data-urlencode "query=$QUERY")
 
+                    # result is a json, check if it contains "error", print it and exit
+                    if [[ $result == *"error"* ]]; then
+                        echo "Error: $result" >&2
+                        exit 1
+                    fi
+
                     # echo "DEBUG: Result: $result"
                     # Extract the value from the result using jq (you can install jq if not already installed)
                     value=$(echo "$result" | jq -r '.data.result[0].value[1]')
@@ -38,7 +44,7 @@ automations:
 
                     # Check if the value is numeric
                     if [[ ! "$value" =~ ^[0-9]+(\.[0-9]+)?$ ]]; then
-                        echo "Error: Value is not numeric." >&2
+                        echo "Error: Value $value is not numeric." >&2
                         exit 1
                     fi
 
@@ -64,10 +70,10 @@ automations:
 
                     # echo "DEBUG: Condition: $condition"
                     if [ "$condition" -eq 1 ]; then
-                        echo "Condition '$OPERATOR $THRESHOLD' met: Value is $value"
+                        echo "Condition '$OPERATOR $THRESHOLD' met: ✅ Value is $value"
                         exit 0
                     else
-                        echo "Condition '$OPERATOR $THRESHOLD' not met: Value is $value"
+                        echo "Condition '$OPERATOR $THRESHOLD' not met: ❌ Value is $value"
                         exit 1
                     fi
 

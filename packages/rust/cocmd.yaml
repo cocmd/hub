@@ -1,0 +1,41 @@
+name: rust
+automations:
+  - name: setup
+    content:
+      description: "Setup rust"
+      env: osx
+      steps:
+      - title: install Rust
+        description: 'Install Rust on this machine'
+        runner: shell
+        content: |
+          # check if rust is installed first, if yes print message and leave
+          if rustc -V > /dev/null; then
+            echo "Rust is already installed, skipping..."
+            exit 0
+          fi
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+          source $HOME/.cargo/env
+          rustup component add rls rust-analysis rust-src
+          rustup target add wasm32-unknown-unknown
+          cargo install cargo-edit
+          cargo install cargo-watch
+          cargo install cargo-make
+
+      - title: Rust VSCode plugins
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Rust development?
+        content: |
+          # check that code is installed, if not print message and exit 1
+          if ! code -v > /dev/null; then
+            echo "VSCode is not installed, skipping..."
+            exit 1
+          fi
+
+          # install vscode plugins for rust
+          code --install-extension rust-lang.rust
+          code --install-extension serayuzgur.crates
+          code --install-extension bungcip.better-toml
+          code --install-extension vadimcn.vscode-lldb
+

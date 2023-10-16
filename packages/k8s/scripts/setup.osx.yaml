@@ -153,4 +153,17 @@ steps:
     description: Install kubefwd on your machine
     runner: shell
     approval_message: Do you whish to install kubefwd?
+  - title: Install VSCode plugins 
+    description: (Optional) If you have VSCode installed, this will install some useful plugins
+    runner: shell
+    approval_message: Do you whish to install VSCode plugins for Kubernetes development?
+    content: |
+      # check that code is installed, if not print message and exit 1
+      if ! code -v > /dev/null; then
+        echo "VSCode is not installed, skipping..."
+        exit 1
+      fi
+
+      # install vscode plugins for kubernetes
+      code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
 

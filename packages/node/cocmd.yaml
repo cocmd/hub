@@ -1,0 +1,42 @@
+name: node
+automations:
+  - name: setup
+    content:
+      description: "Setup common development tools on macOS"
+      env: osx
+      steps:
+      - content: |
+          # check if node is installed first, if yes print message and leave
+          if node -v > /dev/null; then
+            echo "Node.js is already installed, skipping..."
+            exit 0
+          fi
+          brew install node
+        description: 'Install Node.js'
+        runner: shell
+        title: install Node.js
+
+      - title: Install VSCode plugins
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Node.js development?
+        content: |
+          # check that code is installed, if not print message and exit 1
+          if ! code -v > /dev/null; then
+            echo "VSCode is not installed, skipping..."
+            exit 1
+          fi
+
+          code --install-extension dbaeumer.vscode-eslint
+          code --install-extension esbenp.prettier-vscode
+          code --install-extension formulahendry.auto-close-tag
+          code --install-extension formulahendry.auto-rename-tag
+          code --install-extension ms-vscode.vscode-typescript-tslint-plugin
+          code --install-extension msjsdiag.debugger-for-chrome
+          code --install-extension Orta.vscode-jest
+          code --install-extension PKief.material-icon-theme
+          code --install-extension vscode-icons-team.vscode-icons
+          code --install-extension wix.vscode-import-cost
+          code --install-extension xabikos.JavaScriptSnippets
+          code --install-extension zhuangtongfa.material-theme
+          code --install-extension Zignd.html-css-class-completion

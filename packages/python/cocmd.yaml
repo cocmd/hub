@@ -1,0 +1,56 @@
+name: python
+automations:
+  - name: setup
+    content:
+      description: "Setup python"
+      env: osx
+      steps:
+      - title: install Python
+        description: 'Install Python on this machine'
+        runner: shell
+        content: |
+          # check if python is installed first, if yes print message and leave
+          if python3 -V > /dev/null; then
+            echo "Python is already installed, skipping..."
+            exit 0
+          fi
+          brew install python3
+
+      - title: Python VSCode plugins
+        description: (Optional) If you have VSCode installed, this will install some useful plugins
+        runner: shell
+        approval_message: Do you whish to install VSCode plugins for Python development?
+        content: |
+          # check that code is installed, if not print message and exit 1
+          if ! code -v > /dev/null; then
+            echo "VSCode is not installed, skipping..."
+            exit 1
+          fi
+
+          # install vscode plugins for python
+          code --install-extension ms-python.python
+          code --install-extension ms-python.vscode-pylance
+          code --install-extension ms-toolsai.jupyter
+          code --install-extension njpwerner.autodocstring
+          code --install-extension ms-toolsai.jupyter-keymap
+          code --install-extension ms-toolsai.jupyter-renderers
+      - title: Conda
+        description: (Optional) If you have Conda installed, this will install some useful packages
+        runner: shell
+        approval_message: Do you whish to install Conda for Python development?
+        content: |
+          # check if conda is installed first, if yes print message and leave
+          if conda -V > /dev/null; then
+            echo "Conda is already installed, skipping..."
+            exit 0
+          fi
+          # install conda on mac on this machine
+          wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
+          bash ~/miniconda.sh -b -p $HOME/miniconda
+          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.zshrc
+          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bashrc
+          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bash_profile
+          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.profile
+          
+
+

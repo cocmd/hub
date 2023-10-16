@@ -1,5 +1,5 @@
-#!/bin/bash
-set -e
+# COCMD-DESC: Trigger a Jenkins job and optionally monitor its execution.
+# COCMD-USAGE: jenkins-run-build.sh jenkins_url job_name username password [parameters] [wait_for_finish]
 
 # Function to display usage information
 usage() {
@@ -136,9 +136,9 @@ if [ "$WAIT_FOR_FINISH" == "true" ]; then
         echo "Build failed!"
         exit 1
     fi
-    echo "Build succeeded!"
+    echo "✅ Build succeeded!"
 else
-    echo "Not waiting for build to finish."
+    echo "❌ Not waiting for build to finish."
 fi
 
 exit 0

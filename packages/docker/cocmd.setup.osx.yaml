@@ -2,8 +2,9 @@ description: setup docker for desktop
 env: osx
 steps:
 - content: |
-    # Hi There
-    Bo *Bam* **Tam**  
+    # Docker Setup  
+    This will install docker on your machine
+    If you already have docker installed, this will not overwrite it
   runner: markdown
   title: title
 - file: ./scripts/dockerinstall.osx.sh
@@ -11,6 +12,13 @@ steps:
   runner: shell
   title: Install docker
 - content: |
+    # if docker-compose exist, print message and exit 0
+    if command -v docker-compose &> /dev/null
+    then
+        echo "docker-compose is already installed"
+        exit 0
+    fi
+
     # Install Docker Compose
     sudo curl -L "https://github.com/docker/compose/releases/download/1.26.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
