@@ -1,5 +1,18 @@
 name: python
 automations:
+  - name: clean
+    content:
+      description: "Clean python cache and build artifacts"
+      env: osx
+      steps:
+      - title: Clean __pycache__, pyc, pyo files
+        description: 
+        runner: shell
+        content: find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+      - title: Clean build and dist folders
+        runner: shell
+        content: find . | grep -E "(build|dist)" | xargs rm -rf
+
   - name: setup
     content:
       description: "Setup python"
@@ -47,10 +60,74 @@ automations:
           # install conda on mac on this machine
           wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
           bash ~/miniconda.sh -b -p $HOME/miniconda
-          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.zshrc
-          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bashrc
+          if [ -f ~/.zshrc ]; then
+            echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.zshrc
+            echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bashrc
+          fi
           echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bash_profile
           echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.profile
+  - name: setup-poetry
+    content:
+      description: "Setup Poetry for Python development"
+      env: osx
+      steps:
+      - title: Install Poetry
+        description: Install poetry for Python development
+        runner: shell
+        content: |
+          # check if poetry is installed first, if yes print message and leave
+          if poetry -V > /dev/null; then
+            echo "Poetry is already installed, skipping..."
+            exit 0
+          fi
+          
+          echo "installing poetry on mac on this machine..."
+          curl -sSL https://install.python-poetry.org | python3 -
+          
+          # Add Poetry to your PATH
+          if [ -f ~/.zshrc ]; then
+            echo 'export PATH="$PATH:$HOME/.poetry/bin"' >> ~/.zshrc
+            echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.zshrc
+          fi
+          echo 'export PATH="$PATH:$HOME/.poetry/bin"' >> ~/.bashrc
+          echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
+          echo 'export PATH="$PATH:$HOME/.poetry/bin"' >> ~/.bash_profile
+          echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bash_profile
+          echo 'export PATH="$PATH:$HOME/.poetry/bin"' >> ~/.profile
+          echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.profile
+
+          export PATH="$PATH:$HOME/.poetry/bin
+          export PATH="$PATH:$HOME/.local/bin
+          
+          poetry self update
+          poetry completions bash >> ~/.bash_completion
+
+          # if you are using zsh
+          if [ -f ~/.zshrc ]; then
+        
+            # add to zshrc: fpath+=~/.zfunc and autoload -Uz compinit && compinit
+            echo 'fpath+=~/.zfunc' >> ~/.zshrc
+            echo 'autoload -Uz compinit && compinit' >> ~/.zshrc
+
+            mkdir -p $ZSH_CUSTOM/plugins/poetry
+            poetry completions zsh > $ZSH_CUSTOM/plugins/poetry/_poetry
+          fi
+  
+  - name: conda-env-create
+    content:
+      description: Create a conda environment
+      params:
+        - name: py_version
+          save: false
+        - name: name
+          save: false
+      steps:
+      - title: create env
+        description: Create a conda environment
+        runner: shell
+        content: |
+          conda create -n {{name}} python={{py_version}}
+
           
 
 

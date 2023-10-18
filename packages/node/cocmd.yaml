@@ -1,4 +1,12 @@
 name: node
+aliases: |
+  alias ni=npm install -S
+  alias nid=npm install -D
+  alias nb=npm run build
+  alias nd=npm run deploy
+  alias y=yarn
+  alias ya=yarn add
+  alias yr=yarn remove
 automations:
   - name: setup
     content:
@@ -15,6 +23,10 @@ automations:
         description: 'Install Node.js'
         runner: shell
         title: install Node.js
+
+      - title: Install yarn
+        runner: shell
+        content: npm install --global yarn
 
       - title: Install VSCode plugins
         description: (Optional) If you have VSCode installed, this will install some useful plugins
@@ -40,3 +52,21 @@ automations:
           code --install-extension xabikos.JavaScriptSnippets
           code --install-extension zhuangtongfa.material-theme
           code --install-extension Zignd.html-css-class-completion
+  - name: clean-cache
+    content:
+      description: Clean node cache and build artifacts
+      steps:
+      - title: Clean node cache
+        runner: shell
+        content: |
+          # clear global npm cache
+          npm cache clean --force
+          
+          # clear local node_modules
+          rm -rf node_modules
+
+          # clear yarn cache
+          yarn cache clean
+
+
+        
