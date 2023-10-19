@@ -18,8 +18,8 @@ do
 
     # echo to the md file a link to the github of this package in "https://github.com/cocmd/hub/tree/master/packages/$dir"
     echo "### Visit the package [ Source Code ]("https://github.com/cocmd/hub/tree/master/packages/$dir")" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
-    echo "#### Please contribute your $dir scripts and shortcuts" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
-    echo "#### How to contribute?" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo "> Please contribute your $dir scripts and shortcuts" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo "> How to contribute? []()" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
     echo ":::info How To Install?" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
     echo "run in terminal:" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
