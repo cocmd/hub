@@ -1,4 +1,9 @@
 name: rust
+aliases: |
+  alias cb="cargo build"
+  alias ci="cargo install --path ."
+  alias wpbw="wasm-pack build --target web"
+  alias wpbb="wasm-pack build --target bundler"
 automations:
   - name: setup
     content:

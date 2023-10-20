@@ -1,4 +1,6 @@
 name: python
+aliases: |
+  alias httpsrv="python3 -m http.server"  # serve current directory on port 8000
 automations:
   - name: clean
     content:
