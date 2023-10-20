@@ -11,3 +11,5 @@ We encourage you to reach out.
 - [Report an issue](https://github.com/cocmd/hub/issues/new)
 
 - Looking to contribute? See our [good first issues](https://github.com/cocmd/hub/contribute).
+
+- Here's [how to contribute](https://github.com/cocmd/hub/blob/master/CONTRIBUTING.md)
