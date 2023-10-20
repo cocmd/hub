@@ -36,5 +36,22 @@ automations:
               save: true
             - name: email
               save: true
+
+  - name: commit-push-all
+    content:
+      description: "add all, commit and push"
+      params:
+        - name: message
+          save: false
+      steps:
+      - content: git add -A
+        runner: shell
+        title: add all
+      - content: git commit -am "{{message}}"
+        runner: shell
+        title: commit
+      - content: git push
+        runner: shell
+        title: push
       
     
