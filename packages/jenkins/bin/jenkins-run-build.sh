@@ -138,7 +138,7 @@ if [ "$WAIT_FOR_FINISH" == "true" ]; then
     fi
     echo "✅ Build succeeded!"
 else
-    echo "❌ Not waiting for build to finish."
+    echo "Not waiting for build to finish."
 fi
 
 exit 0

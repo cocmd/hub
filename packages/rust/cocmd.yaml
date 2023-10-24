@@ -2,6 +2,9 @@ name: rust
 aliases: |
   alias cb="cargo build"
   alias ci="cargo install --path ."
+  alias ca="cargo add"
+  alias crun="cargo run"
+  alias crem="cargo remove"
   alias wpbw="wasm-pack build --target web"
   alias wpbb="wasm-pack build --target bundler"
 automations:
@@ -22,7 +25,6 @@ automations:
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
           source $HOME/.cargo/env
           rustup component add rls rust-analysis rust-src
-          rustup target add wasm32-unknown-unknown
           cargo install cargo-edit
           cargo install cargo-watch
           cargo install cargo-make
@@ -44,3 +46,54 @@ automations:
           code --install-extension bungcip.better-toml
           code --install-extension vadimcn.vscode-lldb
 
+  - name: setup.wasm
+    content:
+      description: "Setup rust"
+      env: osx
+      steps:
+      - title: install Rust
+        runner: cocmd
+        content: rust.setup
+      - title: Install WASM runtime
+        runner: shell
+        content: rustup target add wasm32-unknown-unknown
+      - title: Install WASM runtime
+        runner: shell
+        content: cargo install wasm-pack
+
+  - name: new-lib
+    content:
+      description: "Create a new Rust project (library)"
+      env: osx
+      params:
+        - name: name
+          save: false
+      steps:
+      - title: Create a new Rust project
+        runner: shell
+        content: cargo new --lib {{name}}
+
+  - name: new-exec
+    content:
+      description: "Create a new Rust project (exec)"
+      env: osx
+      params:
+        - name: name
+          save: false
+      steps:
+      - title: Create a new Rust project
+        runner: shell
+        content: cargo new {{name}}
+
+  - name: cleanup
+    content:
+      description: "Cleanup Rust project"
+      env: osx
+      steps:
+      - title: Cleanup Rust project
+        runner: shell
+        content: |
+          cargo clean
+          rm -rf target
+          rm -rf pkg
+          rm -rf dist

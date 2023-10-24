@@ -28,7 +28,7 @@ automations:
 
                     echo "sending $PROMETHEUS_URL/api/v1/query?query=$QUERY"
                     # Run the query against Prometheus
-                    result=$(curl -G -s "$PROMETHEUS_URL/api/v1/query?" --data-urlencode "query=$QUERY")
+                    result=$(curl -s -G "$PROMETHEUS_URL/api/v1/query?" --data-urlencode "query=$QUERY" || exit 1)
 
                     # result is a json, check if it contains "error", print it and exit
                     if [[ $result == *"error"* ]]; then
@@ -53,8 +53,14 @@ automations:
                     ">=")
                         condition="$(bc <<< "$value >= $THRESHOLD")"
                         ;;
+                    ">")
+                        condition="$(bc <<< "$value > $THRESHOLD")"
+                        ;;
                     "<=")
                         condition="$(bc <<< "$value <= $THRESHOLD")"
+                        ;;
+                    "<")
+                        condition="$(bc <<< "$value < $THRESHOLD")"
                         ;;
                     "=")
                         condition="$(bc <<< "$value == $THRESHOLD")"
