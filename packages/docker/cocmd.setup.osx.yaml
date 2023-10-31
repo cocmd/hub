@@ -1,12 +1,6 @@
 description: setup docker for desktop
 env: osx
 steps:
-- content: |
-    # Docker Setup  
-    This will install docker on your machine
-    If you already have docker installed, this will not overwrite it
-  runner: markdown
-  title: title
 - file: ./scripts/dockerinstall.osx.sh
   description: This will install docker on your machine
   runner: shell

@@ -27,4 +27,22 @@ automations:
       file: ./cocmd.monitor.yaml
     - name: build-run
       file: ./cocmd.buildrun.yaml
-    
+    - name: start
+      content:
+        env: osx
+        description: "Start docker"
+        steps:
+        - title: start docker
+          runner: shell
+          content: |
+            open /Applications/Docker.app
+    - name: start
+      content:
+        env: linux
+        description: "Start docker"
+        steps:
+        - title: start docker
+          runner: shell
+          content: |
+            sudo systemctl start docker
+            sudo systemctl start containerd.service

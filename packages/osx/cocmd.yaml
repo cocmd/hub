@@ -70,6 +70,15 @@ automations:
 
           brew install --cask lastpass
 
+      - title: install Enpass
+        description: 'Install EnPass'
+        runner: shell
+        approval_message: Do you whish to install EnPass?
+        content: |
+          # check if enpass not installed already
+          # tbd
+          exit 1
+
       - title: install whatsapp for desktop
         description: 'Install WhatsApp for desktop'
         runner: shell
@@ -177,3 +186,38 @@ automations:
             exit 0
           fi
           brew install --cask authy
+
+      - title: install bat
+        description: 'Install bat'
+        runner: shell
+        approval_message: Do you whish to install Bat (like `cat` + syntax hightlighting)?
+        content: |
+          # check if bat not installed already
+          if [ -d "/opt/homebrew/bin/bat" ]; then
+            echo "Bat is already installed, skipping..."
+            exit 0
+          fi
+          
+          brew install bat
+
+
+      - title: install exa
+        description: 'Install exa'
+        runner: shell
+        approval_message: Do you whish to install Exa (like `ls` but much better)?
+        content: |
+          # check if exa not installed already
+          if [ -d "/opt/homebrew/bin/exa" ]; then
+            echo "Exa is already installed, skipping..."
+            exit 0
+          fi
+          
+          brew install exa
+
+          # add alias to replace ls with exa in zshrc and bashrc if not already there
+          if ! grep -q "alias ls='exa'" ~/.zshrc; then
+            echo "alias ls='exa'" >> ~/.zshrc
+          fi
+          if ! grep -q "alias ls='exa'" ~/.bashrc; then
+            echo "alias ls='exa'" >> ~/.bashrc
+          fi

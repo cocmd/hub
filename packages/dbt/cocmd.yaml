@@ -1,0 +1,41 @@
+name: dbt
+automations:
+  - name: setup
+    content:
+      description: "Setup python"
+      steps:
+      - title: python
+        runner: cocmd
+        content: python.setup
+
+      - title: dbt install
+        runner: shell
+        content: |
+          pip install \
+            dbt-core \
+            dbt-postgres
+
+  - name: setup.from-source
+    content:
+      description: "Setup python"
+      steps:
+      - title: python
+        runner: cocmd
+        content: python.setup
+
+      - title: dbt install
+        runner: shell
+        content: |
+          git clone https://github.com/dbt-labs/dbt-core.git
+          cd dbt-core
+          pip install -r requirements.txt
+
+      - title: install dbt-reshift plugin
+        runner: shell
+        content: |
+          git clone https://github.com/dbt-labs/dbt-redshift.git
+          cd dbt-redshift
+          pip install .
+          
+
+
