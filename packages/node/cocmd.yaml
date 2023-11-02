@@ -26,7 +26,13 @@ automations:
 
       - title: Install yarn
         runner: shell
-        content: npm install --global yarn
+        content: |          
+          if yarn -v > /dev/null; then
+            echo "yarn is already installed."
+          else
+            echo "yarn is not installed, installing..."
+            npm install -g yarn
+          fi
 
       - title: Install VSCode plugins
         description: (Optional) If you have VSCode installed, this will install some useful plugins
