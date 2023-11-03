@@ -28,7 +28,7 @@ automations:
         runner: shell
         content: |          
           if yarn -v > /dev/null; then
-            echo "yarn is already installed."
+            echo "yarn is already installed. skipping..."
           else
             echo "yarn is not installed, installing..."
             npm install -g yarn

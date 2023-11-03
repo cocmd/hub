@@ -19,11 +19,18 @@ automations:
           # check if zsh already installed, if yes print message and leave
           if zsh --version > /dev/null; then
             echo "Zsh is already installed, skipping..."
+
+            echo "Making zsh default shell"
+            sudo sh -c "echo $(which zsh) >> /etc/shells"
+            chsh -s $(which zsh)
+
             exit 0
           fi
+
           brew install zsh
 
           # Set Zsh as the default shell
+          sudo sh -c "echo $(which zsh) >> /etc/shells"
           chsh -s $(which zsh)
 
           # Configure basic Zsh settings (you can customize this further)
@@ -48,23 +55,20 @@ automations:
           fi
 
           # install Zinit plugin manager
-          bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
+          zsh -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
-          set +e
-          source ~/.zshrc
-          set -e
-
-          zinit self-update
-
-          zinit light zdharma/fast-syntax-highlighting
-          zinit light zsh-users/zsh-autosuggestions
-          zinit light zsh-users/zsh-completions
-          zinit light zsh-users/zsh-history-substring-search
-
-          echo 'zinit light zdharma/fast-syntax-highlighting' >> ~/.zshrc
-          echo 'zinit light zsh-users/zsh-autosuggestions' >> ~/.zshrc
-          echo 'zinit light zsh-users/zsh-completions' >> ~/.zshrc
-          echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc
+          zsh -c "source ~/.zshrc && \
+            zinit self-update && \
+            zinit light zdharma/fast-syntax-highlighting && \
+            zinit light zsh-users/zsh-autosuggestions && \
+            zinit light zsh-users/zsh-completions && \
+            zinit light zsh-users/zsh-history-substring-search && \
+            if ! grep -q 'zinit light zdharma/fast-syntax-highlighting' ~/.zshrc; then \
+              echo 'zinit light zdharma/fast-syntax-highlighting' >> ~/.zshrc; \
+              echo 'zinit light zsh-users/zsh-autosuggestions' >> ~/.zshrc; \
+              echo 'zinit light zsh-users/zsh-completions' >> ~/.zshrc; \
+              echo 'zinit light zsh-users/zsh-history-substring-search' >> ~/.zshrc; \
+            fi"
 
       - title: Install fzf (fuzzy finder)
         description: (Optional) If you have Zsh installed, this will install fzf (fuzzy finder)
