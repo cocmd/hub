@@ -42,6 +42,25 @@ automations:
         description: 'Install Zsh'
         runner: shell
         title: install Zsh
+      
+      - title: Oen theme options
+        runner: link
+        content: https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+      - title: Set Zsh Theme
+        runner: shell
+        approval_message: Here are all the themes, do you whish to set Zsh theme?
+        params:
+          - name: theme_name
+            save: false
+        content: |
+          # set in zshrc the line ZSH_THEME="xxx" with {{theme_name}}, if it exists change it
+          if grep -q "ZSH_THEME=" ~/.zshrc; then
+            sed -i '' "s/ZSH_THEME=.*/ZSH_THEME=\"{{theme_name}}\"/" ~/.zshrc
+          else
+            echo 'ZSH_THEME="{{theme_name}}"' >> ~/.zshrc
+          fi
+
+          echo "Zsh theme set to {{theme_name}}, you will need to run 'source ~/.zshrc' to see the changes"
 
       - title: Install Zinit and top plugins 
         description: (Optional) If you have Zsh installed, this will install some useful plugins for devs
