@@ -1,15 +1,15 @@
 # hub
+
 The official Cocmd's package repository
 
-See https://hub.cocmd.org/ for the current website, and https://cocmd.org/docs/packages/basics/ for additional information on Packages
+See https://cocmd.org/ for more information about Cocmd. 
+
+## Contribute
+
+Contribution guide can be found [here](https://cocmd.org/docs/contribute)
 
 
-## Get Involved
+- [Add an Idea 💡💡💡 for a new playbook](https://github.com/cocmd/hub/issues/new)
+- [Code with us - 🔥features / 🔥bugs](https://github.com/cocmd/cocmd/contribute)
+- [Report a bug 🐞🧨🐞](https://github.com/cocmd/cocmd/issues/new)
 
-We encourage you to reach out.
-
-- [Report an issue](https://github.com/cocmd/hub/issues/new)
-
-- Looking to contribute? See our [good first issues](https://github.com/cocmd/hub/contribute).
-
-- Here's [how to contribute](https://github.com/cocmd/hub/blob/master/CONTRIBUTING.md)
