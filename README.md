@@ -4,6 +4,8 @@ The official Cocmd's package repository
 
 See https://cocmd.org/ for more information about Cocmd. 
 
+[![Discord Channel](https://dcbadge.vercel.app/api/server/hKFKTaMKkq/)](https://discord.gg/kPZBDKbk)
+
 ## Contribute
 
 Contribution guide can be found [here](https://cocmd.org/docs/contributing)
