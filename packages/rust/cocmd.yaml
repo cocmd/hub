@@ -25,6 +25,10 @@ automations:
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
           source $HOME/.cargo/env
           rustup component add rls rust-analysis rust-src
+      - title: install Rust essentials
+        description: 'Install Rust on this machine'
+        runner: shell
+        content: |
           cargo install cargo-edit
           cargo install cargo-watch
           cargo install cargo-make

@@ -20,6 +20,11 @@ automations:
       env: osx
       steps:
       - content: |
+          # check if git is installed first, if yes print message and leave
+          if git --version > /dev/null; then
+            echo "Git is already installed, skipping..."
+            exit 0
+          fi
           brew install git
         description: 'Install basic Git'
         runner: shell
