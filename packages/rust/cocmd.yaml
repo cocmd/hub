@@ -41,6 +41,8 @@ automations:
           rustup target add wasm32-unknown-unknown
           rustup target add aarch64-apple-darwin
 
+          rustup toolchain install nightly
+
           echo looks good: \n `rustup show`
 
       - title: Rust VSCode plugins
