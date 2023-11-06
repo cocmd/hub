@@ -92,6 +92,10 @@ automations:
           # install conda on mac on this machine
           wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
           bash ~/miniconda.sh -b -p $HOME/miniconda
+
+          rm -rf /usr/local/bin/python
+          ln -s ~/miniconda/bin/python /usr/local/bin/python
+          ln -s ~/miniconda/bin/python3 /usr/local/bin/python3
       - title: update shell path
         runner: shell
         content: |    

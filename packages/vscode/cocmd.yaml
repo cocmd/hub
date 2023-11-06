@@ -18,14 +18,22 @@ automations:
           if [ -f ~/.zshrc ]; then
             if ! grep -q 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' ~/.zshrc; then
               echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.zshrc
+              set +e
+              source ~/.zshrc
             fi
           fi
           if [ -f ~/.bashrc ]; then
             if ! grep -q 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' ~/.bashrc; then
               echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.bashrc
+              set +e
+              source ~/.bashrc
             fi
           fi
-          
+
+          # if code is in the path, write a good message
+          if code -v > /dev/null; then
+            echo "'code' is in your path"
+          fi
 
   - name: setup
     content:
