@@ -1,5 +1,32 @@
 name: vscode
 automations:
+  - name: setup-vscode-cli
+    content:
+      description: install vscode cli 'code' in your shell
+      runner: shell
+      env: osx
+      steps:
+      - title: install Visual Studio Code
+        runner: shell
+        content: |
+          # check "/Applications/Visual\ Studio\ Code.app" dir exists, if not print message and exit 1
+          if ! [ -d /Applications/Visual\ Studio\ Code.app/ ]; then
+            echo "Visual Studio Code is not installed, skipping..."
+            exit 1
+          fi
+
+          if [ -f ~/.zshrc ]; then
+            if ! grep -q 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' ~/.zshrc; then
+              echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.zshrc
+            fi
+          fi
+          if [ -f ~/.bashrc ]; then
+            if ! grep -q 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' ~/.bashrc; then
+              echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.bashrc
+            fi
+          fi
+          
+
   - name: setup
     content:
       description: "Install VSCode and coding plugins"
@@ -10,19 +37,36 @@ automations:
         runner: shell
         content: |
           # check if code is installed first, if yes print message and leave
-          if code -v > /dev/null; then
+          if [ -d /Applications/Visual\ Studio\ Code.app/ ]; then
             echo "Visual Studio Code is already installed, skipping..."
             exit 0
           fi
 
           brew install --cask visual-studio-code
-
-          # setup the code binary in the path with vscode
-          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.zshrc
-          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.bashrc
-          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.bash_profile
-          echo 'export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"' >> ~/.profile
-
+          
+      - title: install cli path
+        runner: cocmd
+        content: vscode.setup-vscode-cli
+      
+      - title: install extentions
+        runner: cocmd
+        approval_message: Do you whish to go through the different VScode extentions?
+        content: vscode.setup-extentions
+  
+  - name: setup-extentions
+    content:
+      description: "Install VSCode and extentions"
+      env: osx
+      steps:
+      - title: Install icons pack
+        runner: shell
+        approval_message: Do you whish to install icon pack for vscode?
+        content: |
+          # check that code is installed, if not print message and exit 1
+          if ! code -v > /dev/null; then
+            echo "VSCode is not installed, skipping..."
+            exit 1
+          fi
           code --install-extension vscode-icons-team.vscode-icons
       - title: Install extentions for Python
         description: (Optional) If you have VSCode installed, this will install some useful plugins

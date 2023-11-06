@@ -8,9 +8,23 @@ aliases: |
   alias ya=yarn add
   alias yr=yarn remove
 automations:
+  - name: setup.yarn
+    content:
+      description: setup yarn
+      env: any
+      steps:
+      - title: Install yarn
+        runner: shell
+        content: |          
+          if yarn -v > /dev/null; then
+            echo "yarn is already installed. skipping..."
+          else
+            echo "yarn is not installed, installing..."
+            npm install -g yarn
+          fi
   - name: setup
     content:
-      description: "Setup common development tools on macOS"
+      description: setup node on macos
       env: osx
       steps:
       - content: |
@@ -25,14 +39,8 @@ automations:
         title: install Node.js
 
       - title: Install yarn
-        runner: shell
-        content: |          
-          if yarn -v > /dev/null; then
-            echo "yarn is already installed. skipping..."
-          else
-            echo "yarn is not installed, installing..."
-            npm install -g yarn
-          fi
+        runner: cocmd
+        content: node.setup.yarn
 
       - title: Install VSCode plugins
         description: (Optional) If you have VSCode installed, this will install some useful plugins

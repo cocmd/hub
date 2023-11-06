@@ -24,14 +24,24 @@ automations:
           fi
           curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
           source $HOME/.cargo/env
-          rustup component add rls rust-analysis rust-src
+
       - title: install Rust essentials
-        description: 'Install Rust on this machine'
         runner: shell
         content: |
+          rustup component add rls rust-analysis rust-src
           cargo install cargo-edit
           cargo install cargo-watch
           cargo install cargo-make
+
+      - title: Install toolchains
+        runner: shell
+        content: |
+          rustup target add x86_64-unknown-linux-gnu
+          rustup target add x86_64-pc-windows-gnu
+          rustup target add wasm32-unknown-unknown
+          rustup target add aarch64-apple-darwin
+
+          echo looks good: \n `rustup show`
 
       - title: Rust VSCode plugins
         description: (Optional) If you have VSCode installed, this will install some useful plugins

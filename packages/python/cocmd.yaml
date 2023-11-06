@@ -24,12 +24,31 @@ automations:
         description: 'Install Python on this machine'
         runner: shell
         content: |
-          # check if python is installed first, if yes print message and leave
-          if python3 -V > /dev/null; then
+          # check if python3 AND python is installed first, if yes print message and leave
+          if python3 -V > /dev/null && python -V > /dev/null; then
             echo "Python is already installed, skipping..."
             exit 0
           fi
           brew install python3
+
+          # make sure python3 installed, if not print message and exit 1
+          if ! python3 -V > /dev/null; then
+            echo "Python3 failed to install"
+            exit 1
+          fi
+
+          # link python to python3 if it's not setup already
+          if ! python -V > /dev/null; then
+            echo "Linking python to python3"
+            rm -rf /usr/local/bin/python
+            ln -s /opt/homebrew/bin/python3 /usr/local/bin/python
+          fi
+
+          # make sure python is installed, if not print message and exit 1
+          if ! python -V > /dev/null; then
+            echo "Python failed to install"
+            exit 1
+          fi
 
       - title: Python VSCode plugins
         description: (Optional) If you have VSCode installed, this will install some useful plugins
@@ -49,25 +68,50 @@ automations:
           code --install-extension njpwerner.autodocstring
           code --install-extension ms-toolsai.jupyter-keymap
           code --install-extension ms-toolsai.jupyter-renderers
-      - title: Conda
-        description: (Optional) If you have Conda installed, this will install some useful packages
+
+      - title: Install miniconda
+        runner: cocmd
+        approval_message: Do you whish to install Mini-Conda (virtual environement management)?
+        content: python.setup.miniconda
+  - name: setup.miniconda
+    content:
+      description: "Setup miniconda"
+      env: osx
+      steps:
+      - title: install miniconda
         runner: shell
-        approval_message: Do you whish to install Conda for Python development?
         content: |
-          # check if conda is installed first, if yes print message and leave
-          if conda -V > /dev/null; then
+          # check that directory ~/miniconda/ installed, if yes print message and exit 0
+          if [ -d ~/miniconda/ ]; then
             echo "Conda is already installed, skipping..."
             exit 0
           fi
+
+          rm -r ~/miniconda/
+
           # install conda on mac on this machine
           wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
           bash ~/miniconda.sh -b -p $HOME/miniconda
+      - title: update shell path
+        runner: shell
+        content: |    
+          # for zsh
           if [ -f ~/.zshrc ]; then
-            echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.zshrc
-            echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bashrc
+            if ! grep -q "miniconda" ~/.zshrc; then
+              echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.zshrc
+            fi
+            echo please run "source ~/.zshrc" to make conda available to you
           fi
-          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bash_profile
-          echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.profile
+
+          # for bash
+          if [ -f ~/.bashrc ]; then
+            if ! grep -q "miniconda" ~/.bashrc; then
+              echo 'export PATH="$PATH:$HOME/miniconda/bin"' >> ~/.bashrc
+            fi
+            echo please run "source ~/.bashrc" to make conda available to you
+          fi
+          
+
   - name: setup-poetry
     content:
       description: "Setup Poetry for Python development"
