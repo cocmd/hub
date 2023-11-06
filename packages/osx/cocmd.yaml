@@ -1,19 +1,48 @@
 name: osx
 automations:
+  - name: setup.brew
+    content:
+      description: setup brew
+      env: osx
+      steps:
+      - runner: shell
+        title: install Homebrew
+        content: |
+          # check if already installed
+          if brew -v > /dev/null; then
+            echo "Homebrew is already installed, skipping..."
+            exit 0
+          fi
+
+          # Install Homebrew
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          
+          # if bashrc exists, add brew to path
+          if [ -f ~/.bashrc ]; then
+            if ! grep -q 'eval "$(/opt/homebrew/bin/brew shellenv)"' ~/.bashrc; then
+              echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bashrc
+              set +e
+              source ~/.bashrc
+            fi
+          fi
+          
+          # if zshrc exists, add brew to path
+          if [ -f ~/.zshrc ]; then
+            if ! grep -q 'eval "$(/opt/homebrew/bin/brew shellenv)"' ~/.zshrc; then
+              echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zshrc
+              set +e
+              source ~/.zshrc
+            fi
+          fi
+        
   - name: setup
     content:
       description: "Setup common packages on macOS"
       env: osx
       steps:
-      - content: |
-          # Install Homebrew
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-          echo '# Set PATH, MANPATH, etc., for Homebrew.' >> ~.bash_profile
-          echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.bash_profile
-        description: 'Install Homebrew and configure environment'
-        runner: shell
-        title: install Homebrew
+      - title: install Homebrew
+        runner: cocmd
+        content: setup.brew
       
       - content: |
           brew install curl

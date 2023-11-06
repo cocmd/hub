@@ -58,5 +58,12 @@ automations:
       - content: git push
         runner: shell
         title: push
+  
+  - name: setup.github
+    file: ./cocmd.github.osx.yaml
+  - name: setup.github
+    file: ./cocmd.github.windows.yaml
+  - name: setup.github
+    file: ./cocmd.github.linux.yaml
       
     

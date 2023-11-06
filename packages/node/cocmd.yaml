@@ -24,23 +24,66 @@ automations:
           fi
   - name: setup.pnpm
     content:
-      description: setup pnpm - https://pnpm.io/installation
-      env: any
+      description: setup pnpm - https://pnpm.io/installation    
+      env: windows
       steps:
-      - title: Install yarn
+      - title: install pnpm
         runner: shell
-        content: npm install -g pnpm
+        content: iwr https://get.pnpm.io/install.ps1 -useb | iex
+  - name: setup.pnpm
+    content:
+      description: setup pnpm - https://pnpm.io/installation    
+      env: linux
+      steps:
+      - title: install pnpm
+        runner: shell
+        content: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh 
+          # reload bashrc if exists
+          if [ -f ~/.bashrc ]; then
+            set +e
+            source ~/.bashrc
+          fi
+  - name: setup.pnpm
+    content:
+      description: setup pnpm - https://pnpm.io/installation    
+      env: osx
+      steps:
+      - title: install pnpm
+        runner: shell
+        content: |
+          curl -fsSL https://get.pnpm.io/install.sh | sh 
+
+          # reload bashrc if exists
+          if [ -f ~/.bashrc ]; then
+            set +e
+            source ~/.bashrc
+          fi
+
+          # reload zshrc if exists
+          if [ -f ~/.zshrc ]; then
+            set +e
+            source ~/.zshrc
+          fi 
+  - name: remove.pnpm
+    content:
+      description: remove pnpm
+      env: osx
+      steps:
+      - title: remove pnpm
+        runner: shell
+        content: |
+          set +e
+          rm -rf $(pnpm store path)
+          rm -rf $PNPM_HOME
+          npm rm -g pnpm
+
   - name: setup
     content:
       description: setup node on macos
       env: osx
       steps:
       - content: |
-          # check if node is installed first, if yes print message and leave
-          if node -v > /dev/null; then
-            echo "Node.js is already installed, skipping..."
-            exit 0
-          fi
           brew install node
         description: 'Install Node.js'
         runner: shell
