@@ -22,6 +22,14 @@ automations:
             echo "yarn is not installed, installing..."
             npm install -g yarn
           fi
+  - name: setup.pnpm
+    content:
+      description: setup pnpm - https://pnpm.io/installation
+      env: any
+      steps:
+      - title: Install yarn
+        runner: shell
+        content: npm install -g pnpm
   - name: setup
     content:
       description: setup node on macos
