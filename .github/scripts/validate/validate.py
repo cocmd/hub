@@ -34,7 +34,7 @@ def validate_package(path: str) -> Optional[str]:
     # at least the word "aliases", "PATH additions" or "automations"
     # and also we must see "-location:"
     
-    command = f"cocmd show package {name}"
+    command = f"cocmd docs --raw-markdown {name}"
     output = os.popen(command).read()
     print(output)
     
