@@ -39,10 +39,10 @@ def validate_package(path: str) -> Optional[str]:
     print(output)
     
     if "aliases" not in output and "PATH additions" not in output and "automations" not in output:
-        return f"Package was not loaded. Please check the output of the command: {command}"
+        return f"Package looks empty. Please check the output of the command: {command}: \n output"
     
     if "location:" not in output:
-        return f"Package was not loaded. Please check the output of the command: {command}"
+        return f"Package was not loaded. Please check the output of the command: {command}: \n output"
     
     
           
