@@ -28,8 +28,7 @@ with open("validation_report.md", "w", encoding="utf-8") as f:
   f.write("## CI Quality Check 🤖🚨 \n\n")
 
   if len(report_errors) == 0:
-    f.write("All checks passed ✅ Great job!\n\n")
-    f.write("![Great Job](https://raw.githubusercontent.com/cocmd/hub/master/.github/scripts/validate/great-job-image.jpg)")
+    f.write("All packages look ok ✅ Great job!\n\n")
   else:
     f.write("Oh snap! Our robots detected some errors 🤖 We need to solve them before merging the package:\n\n")
     for package in report_errors:
