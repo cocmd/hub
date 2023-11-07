@@ -51,15 +51,9 @@ do
 done
 
 cd $WEBSITE_PATH
-sed "s/CURRENT_STABLE_VERSION = .*/CURRENT_STABLE_VERSION = 'v$VERSION';/" docusaurus.config.js > docusaurus.config.js.bak
-mv docusaurus.config.js.bak docusaurus.config.js
-
-yarn
-yarn build && yarn deploy
-
 echo "Committing version update"
-git add docusaurus.config.js
-git commit -m "Version bump: $VERSION"
+git add .
+git commit -m "Update packages from hub"
 
 echo "Pushing changes"
 git push

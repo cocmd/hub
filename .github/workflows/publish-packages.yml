@@ -6,6 +6,17 @@ on:
       - master
 
 jobs:
+  update-website-docs:
+    concurrency: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: install cocmd
+        run: |
+          bash -c "$(curl -fsSL https://cocmd.org/linux/install.sh)"
+      
+
+
   publish-packages:
     concurrency: deploy
     runs-on: ubuntu-latest
