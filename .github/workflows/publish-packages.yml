@@ -14,7 +14,7 @@ jobs:
       - name: install cocmd
         run: |
           bash -c "$(curl -fsSL https://cocmd.org/linux/install.sh)"
-      
+          cocmd --version
 
 
   publish-packages:
