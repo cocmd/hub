@@ -1,0 +1,8 @@
+description: "install github cli"
+env: windows
+steps:
+- title: install
+  description: from https://github.com/cli/cli#installation
+  runner: shell
+  content: |
+    winget install --id GitHub.cli	

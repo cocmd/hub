@@ -1,0 +1,17 @@
+description: "install github cli"
+env: osx
+steps:
+- title: install brew
+  runner: cocmd
+  content: osx.setup.brew
+
+- title: install gh
+  runner: shell
+  description: https://github.com/cli/cli#installation
+  content: |
+    # check if gh is installed first, if yes print message and leave
+    if gh --version > /dev/null; then
+      echo "gh is already installed, skipping..."
+      exit 0
+    fi
+    brew install gh
