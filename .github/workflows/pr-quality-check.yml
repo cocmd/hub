@@ -15,10 +15,14 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.9'
+      - name: install cocmd
+        run: |
+          bash -c "$(curl -fsSL https://cocmd.org/linux/install.sh)"
+          cocmd --version
       - name: "Install python dependencies"
         run: "pip install pyyaml"
       - name: "Quality check"
-        run: "python .github/scripts/validate/master.py"
+        run: "python .github/scripts/validate/main.py"
       - name: "Publish report"
         if: always()
         run: cat validation_report.md >> $GITHUB_STEP_SUMMARY
