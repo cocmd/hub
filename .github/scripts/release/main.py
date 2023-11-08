@@ -4,7 +4,7 @@ import os
 import yaml
 import shutil
 import tempfile
-import hashlib
+
 import subprocess
 import time
 import json
@@ -13,13 +13,13 @@ from typing import TypedDict
 from typing import List
 from typing import Tuple 
 
+from utils import calculate_sha256, get_next_version
 
 Package = namedtuple('Package', 'name version location title description author tags')
 UploadedPackage = namedtuple('UploadedPackage', 'name version')
 
 should_publish = os.getenv("PUBLISH", "false") == "true"
 
-RELEASES_VERSION = "0.0.0"
 
 # Get the packages that have been published on the Github Releases section
 def get_released_packages() -> List[UploadedPackage]:
@@ -49,7 +49,8 @@ def get_repository_packages() -> List[Package]:
       try:
         manifest = yaml.safe_load(stream)
         name = manifest["name"]
-        package = Package(name, '0.0.0', package_dir, name, name, "cocmd", [])
+        version = manifest.get("version", "0.0.0")
+        package = Package(name, version, package_dir, name, name, "cocmd", [])
         packages.append(package)
       except yaml.YAMLError as exc:
         print("Exception parsing YAML ", exc)
@@ -70,13 +71,6 @@ def calculate_missing_packages(released: List[Package], repository: List[Package
   
   return missing_packages
 
-# Calculate SHA256 of the given file 
-def calculate_sha256(filename) -> str:
-  sha256_hash = hashlib.sha256()
-  with open(filename,"rb") as f:
-    for byte_block in iter(lambda: f.read(4096),b""):
-      sha256_hash.update(byte_block)
-    return sha256_hash.hexdigest()
 
 # Archive the given package, calculating its hash
 def create_archive(package: Package)-> Tuple[str, str, str]: 
@@ -95,15 +89,15 @@ def create_archive(package: Package)-> Tuple[str, str, str]:
 
 
 # Upload the package files (archive + SHA256 sum) on GH Releases
-def upload_to_releases(archive_path, archive_hash_path):
+def upload_to_releases(archive_path, archive_hash_path, release_version):
   if should_publish:
-    print("Uploading to Github Releases...",  RELEASES_VERSION)
-    subprocess.run(["gh", "release", "upload", RELEASES_VERSION, archive_hash_path, archive_path, "--clobber" ])
+    print("Uploading to Github Releases...",  release_version)
+    subprocess.run(["gh", "release", "upload", release_version, archive_hash_path, archive_path, "--clobber" ])
   else:
     print("didn't really upload")
 
 # Generate the updated index and upload it to GH Releases
-def update_index(repository: List[Package]):
+def update_index(repository: List[Package], release_version: str):
   packages = []
 
   for package in repository:
@@ -132,19 +126,23 @@ def update_index(repository: List[Package]):
     file.write(json_index)
 
   if should_publish:
-    subprocess.run(["gh", "release", "upload", RELEASES_VERSION, target_file, "--clobber"])
+    subprocess.run(["gh", "release", "upload", release_version, target_file, "--clobber"])
 
-subprocess.run(["gh", "release", "create", RELEASES_VERSION])
+release_version = "0.0.0"
+
+print(f"will release to version: {release_version}")
+
+subprocess.run(["gh", "release", "create", release_version])
 print("Reading packages from repository...")
 repository_packages = get_repository_packages()
 print(f'found {len(repository_packages)} packages in this PR')
 
 # print("Obtaining released packages from GitHub Releases...")
-released_packages = [] # get_released_packages()
+released_packages = get_released_packages()
 
 print("")
 print("Calculating delta...")
-missing_packages = repository_packages #calculate_missing_packages(released_packages, repository_packages)
+missing_packages = calculate_missing_packages(released_packages, repository_packages)
 
 if len(missing_packages) == 0:
   print("Packages are already up-to-date")
@@ -159,12 +157,11 @@ for package in missing_packages:
 
   print(f"Created archive {archive_path}, hash: {archive_hash}")
 
-  
-  upload_to_releases(archive_path, archive_hash_path)
+  upload_to_releases(archive_path, archive_hash_path, release_version)
   print("Done!")
 
 print("")
 print("Updating index...")
-update_index(repository_packages)
+update_index(repository_packages, release_version)
 
 print("Done!")
