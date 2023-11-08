@@ -25,14 +25,14 @@ Contribution guide can be found [here](https://cocmd.org/docs/contributing)
         <a href="https://github.com/tevmji">
             <img src="https://avatars.githubusercontent.com/u/37437346?v=4" width="100;" alt="tevmji"/>
             <br />
-            <sub><b>Null</b></sub>
+            <sub><b>tevmji</b></sub>
         </a>
     </td>
     <td align="center">
         <a href="https://github.com/mzsrtgzr2">
             <img src="https://avatars.githubusercontent.com/u/3530526?v=4" width="100;" alt="mzsrtgzr2"/>
             <br />
-            <sub><b>Moshe Roth</b></sub>
+            <sub><b>mzsrtgzr2</b></sub>
         </a>
     </td></tr>
 </table>
