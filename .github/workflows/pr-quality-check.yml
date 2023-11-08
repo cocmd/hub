@@ -21,7 +21,7 @@ jobs:
           cocmd --version
       - name: "Install python dependencies"
         run: "pip install pyyaml"
-      - name: "Quality check"
+      - name: "Quality check" 
         run: "python .github/scripts/validate/main.py"
       - name: "Publish report"
         if: always()
