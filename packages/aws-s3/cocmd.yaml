@@ -1,5 +1,5 @@
 name: aws-s3
-version: 0.0.1
+version: 0.0.0
 aliases: |
   alias aws='aws'
   alias s3ls='aws s3 ls'

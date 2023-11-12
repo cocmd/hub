@@ -12,6 +12,8 @@ import re
 from typing import TypedDict
 from typing import List
 from typing import Tuple 
+import urllib.request
+
 
 from utils import calculate_sha256, get_next_version
 
@@ -112,6 +114,28 @@ def update_index(repository: List[Package], release_version: str):
       "archive_sha256_url": f"https://github.com/cocmd/hub/releases/latest/download/{package.name}-{package.version}-sha256.txt",
     })
   
+  COCMD_HUB_PACKAGE_INDEX_URL = \
+    "https://github.com/cocmd/hub/releases/latest/download/package_index.json"
+  # download current index (COCMD_HUB_PACKAGE_INDEX_URL)
+  # update it with the new packages
+  # by name and version
+  # keep all version of the same package
+  
+  data = urllib.request.urlopen(COCMD_HUB_PACKAGE_INDEX_URL).read()
+  latest_index = json.loads(data)
+  
+  for package in packages:
+    # check if package (name and version) exists in latest
+    # if it does - don't add it
+    
+    if any(p["name"] == package["name"] and p["version"] == package["version"] for p in latest_index["packages"]):
+      print(f"Package {package['name']}@{package['version']} already exists in index, skipping")
+      continue
+    
+    latest_index["packages"].append(package)
+    
+  packages = latest_index["packages"]
+  
   index = {
     "last_update": round(time.time()),
     "packages": packages,
@@ -128,40 +152,38 @@ def update_index(repository: List[Package], release_version: str):
   if should_publish:
     subprocess.run(["gh", "release", "upload", release_version, target_file, "--clobber"])
 
-release_version = "0.0.0"
 
-print(f"will release to version: {release_version}")
+if __name__ == "__main__":
+  release_version = "0.0.0"
 
-subprocess.run(["gh", "release", "create", release_version])
-print("Reading packages from repository...")
-repository_packages = get_repository_packages()
-print(f'found {len(repository_packages)} packages in this PR')
+  print(f"will release to version: {release_version}")
 
-# print("Obtaining released packages from GitHub Releases...")
-released_packages = get_released_packages()
+  subprocess.run(["gh", "release", "create", release_version])
+  print("Reading packages from repository...")
+  repository_packages = get_repository_packages()
+  print(f'found {len(repository_packages)} packages in this PR')
 
-print("")
-print("Calculating delta...")
-missing_packages = calculate_missing_packages(released_packages, repository_packages)
+  # print("Obtaining released packages from GitHub Releases...")
+  released_packages = get_released_packages()
 
-if len(missing_packages) == 0:
-  print("Packages are already up-to-date")
-  quit(0)
+  print("")
+  print("Calculating delta...")
+  missing_packages = calculate_missing_packages(released_packages, repository_packages)
 
-print("")
-print("Packages to publish:")
-for package in missing_packages:
-  print(f"--> {package.name}@{package.version}")
+  print("")
+  print("Packages to publish:")
+  for package in missing_packages:
+    print(f"--> {package.name}@{package.version}")
 
-  archive_path, archive_hash_path, archive_hash = create_archive(package)
+    archive_path, archive_hash_path, archive_hash = create_archive(package)
 
-  print(f"Created archive {archive_path}, hash: {archive_hash}")
+    print(f"Created archive {archive_path}, hash: {archive_hash}")
 
-  upload_to_releases(archive_path, archive_hash_path, release_version)
+    upload_to_releases(archive_path, archive_hash_path, release_version)
+    print("Done!")
+
+  print("")
+  print("Updating index...")
+  update_index(repository_packages, release_version)
+
   print("Done!")
-
-print("")
-print("Updating index...")
-update_index(repository_packages, release_version)
-
-print("Done!")
