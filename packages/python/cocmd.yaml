@@ -1,4 +1,5 @@
 name: python
+version: 0.0.1
 aliases: |
   alias httpsrv="python3 -m http.server"  # serve current directory on port 8000
 automations:
@@ -87,7 +88,7 @@ automations:
             exit 0
           fi
 
-          rm -r ~/miniconda/
+          rm -rf ~/miniconda/
 
           # install conda on mac on this machine
           wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
