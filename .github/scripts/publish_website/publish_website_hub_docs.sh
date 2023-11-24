@@ -17,7 +17,7 @@ do
     echo "# $dir" > $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
     # echo to the md file a link to the github of this package in "https://github.com/cocmd/hub/tree/master/packages/$dir"
-    echo "### Visit the package [ Source Code ]("https://github.com/cocmd/hub/tree/master/packages/$dir")" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    echo "### [ Source Code ]("https://github.com/cocmd/hub/tree/master/packages/$dir")" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
     echo "> Please contribute your $dir playbooks and shortcuts" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
     echo "> [How to contribute?](https://cocmd.org/docs/contributing)" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
@@ -28,13 +28,13 @@ do
     echo "\`\`\`" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
     echo ":::" >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
-    cocmd docs $dir --raw-markdown>> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    cocmd docs $dir --raw >> $WEBSITE_PATH/docs/packages/from_hub/$dir.md
     
     # remove line that contains "location:" from md file
     sed -i '' '/location:/d' $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
     # remove original title
-    sed -i '' "/## $dir/d" $WEBSITE_PATH/docs/packages/from_hub/$dir.md
+    # sed -i '' "/## $dir/d" $WEBSITE_PATH/docs/packages/from_hub/$dir.md
 
     # set var with home_dir ~ and dir '.cocmd/runtime/$dir'
     
@@ -49,6 +49,7 @@ do
 
     
 done
+
 
 cd $WEBSITE_PATH
 echo "Committing version update"
