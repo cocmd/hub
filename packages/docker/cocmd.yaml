@@ -36,6 +36,13 @@ automations:
           runner: shell
           content: |
             open /Applications/Docker.app
+
+            # wait until docker is up and runnnig
+            while ! docker info > /dev/null 2>&1; do
+              sleep 1
+              echo "Waiting for Docker to launch..."
+            done
+            ehco "Docker is up and running"
     - name: start
       content:
         env: linux
@@ -46,3 +53,10 @@ automations:
           content: |
             sudo systemctl start docker
             sudo systemctl start containerd.service
+
+            # wait until docker is up and runnnig
+            while ! docker info > /dev/null 2>&1; do
+              sleep 1
+              echo "Waiting for Docker to launch..."
+            done
+            ehco "Docker is up and running"
