@@ -34,11 +34,11 @@ def validate_package(path: str) -> Optional[str]:
     # at least the word "aliases", "PATH additions" or "automations"
     # and also we must see "-location:"
     
-    command = f"cocmd docs --raw-markdown {name}"
+    command = f"cocmd docs --raw {name}"
     output = os.popen(command).read()
     print(output)
     
-    if "aliases" not in output and "PATH additions" not in output and "automations" not in output:
+    if "This package contains" not in output:
         return f"Package looks empty. Please check the output of the command: {command}: \n {output}"
     
     if "location:" not in output:
