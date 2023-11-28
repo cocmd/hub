@@ -1,4 +1,5 @@
 name: docker
+version: 0.0.1
 aliases: |
     alias d='docker'
     alias da='docker attach'
